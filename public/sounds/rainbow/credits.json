@@ -1,0 +1,74 @@
+{
+  "pack": "rainbow",
+  "cues": {
+    "wax-squish": {
+      "files": [
+        "wax-squish-01.wav",
+        "wax-squish-02.wav",
+        "wax-squish-03.wav",
+        "wax-squish-04.wav",
+        "wax-squish-05.wav",
+        "wax-squish-06.wav",
+        "wax-squish-07.wav",
+        "wax-squish-08.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 666969,
+          "title": "Squeezing a Slime Ball",
+          "author": "niittymaa",
+          "url": "https://freesound.org/people/niittymaa/sounds/666969/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "Real recording of a slime ball being squeezed in a hand, used as a stand-in for the soft inner core of the wax ball. Each slice is one soft, dull squeeze burst of 136-200 ms (centroid 2026-2734 Hz) with no sharp pops, only a few tiny micro-bursts inside the one squeeze. Picked for single-gesture shape, event SNR >= 44 dB, no clipping, source noise floor -64 dBFS; RMS -24 to -21 dBFS, spread 3.3 dB. A 4.5 kHz low-pass and 90 Hz high-pass mute the wet 4-8 kHz fizz of the original, so it is a soft mush rather than a slimy squelch. Check first: that it reads as gentle rather than slimy. The quiet gaps of the source contain a faint 54/151 Hz rumble and a weak 100 Hz-spaced buzz comb around 1.7-2.3 kHz; all are measured 40+ dB under the events. Rejected: #680447 (messy micro-pops), #448641 (spiky), #546086 (too faint), #802616 (mouth-made squishes).",
+      "process": "Source #666969 (Freesound preview -hq.mp3 decoded to 16-bit WAV with ffmpeg at native 44100 Hz, channels averaged to mono). Filters on the whole recording before cutting: 2nd-order Butterworth 90 Hz high-pass and 4.5 kHz low-pass (scipy.signal.sosfilt, causal). Slice onset = first 1 ms block above 5% of the event's own peak, slice starts 3 ms before it; 2 ms linear fade-in, 50 ms raised-cosine fade-out, then each slice peak-normalised to 0.85 (gain below). Slices as file: file start in source s / transient onset in source s / length ms / gain dB: 01: 18.169 / 18.172 / 159 / +18.3; 02: 32.872 / 32.875 / 163 / +17.5; 03: 38.721 / 38.724 / 136 / +16.6; 04: 43.419 / 43.422 / 142 / +14.9; 05: 50.321 / 50.324 / 200 / +13.5; 06: 53.235 / 53.238 / 139 / +11.9; 07: 66.272 / 66.275 / 192 / +16.1; 08: 68.229 / 68.232 / 146 / +16.3."
+    },
+    "jelly-land": {
+      "files": [
+        "jelly-land-01.wav",
+        "jelly-land-02.wav",
+        "jelly-land-03.wav",
+        "jelly-land-04.wav",
+        "jelly-land-05.wav",
+        "jelly-land-06.wav",
+        "jelly-land-07.wav",
+        "jelly-land-08.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 242853,
+          "title": "Bubbles.aiff",
+          "author": "lynelliot",
+          "url": "https://freesound.org/people/lynelliot/sounds/242853/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "Bubbles blown through a straw into thick flour-and-water batter. Each slice is ONE bubble: a rising 'bloop' (dominant pitch climbs from about 350-650 Hz in the first half to 600-850 Hz in the second half) ending in a pop, 74-123 ms long, 62-86% of the energy in a single resonance and under 1% above 3 kHz. Used for the round, bouncy 'pong' when landing on the big soda-jelly block. Check first: the energy peaks 25-60 ms after the onset (swell then pop), so the hit lands slightly later than a click would; RMS is high (-16 to -10 dBFS, spread 5.3 dB) because the sound is tonal, so it may need turning down in the mixer. Source noise floor is -52 dBFS (borderline) but every bubble sits at least 42 dB above it and no hum lines were found. Only a 90 Hz high-pass was applied. Alternative not used (pure mouth-made plops, more synthetic): Freesound #401969.",
+      "process": "Source #242853 (Freesound preview -hq.mp3 decoded to 16-bit WAV with ffmpeg at native 48000 Hz, channels averaged to mono). Filters on the whole recording before cutting: 2nd-order Butterworth 90 Hz high-pass (scipy.signal.sosfilt, causal). Slice onset = first 1 ms block above 5% of the event's own peak, slice starts 3 ms before it; 2 ms linear fade-in, 30 ms raised-cosine fade-out, then each slice peak-normalised to 0.85 (gain below). Slices as file: file start in source s / transient onset in source s / length ms / gain dB: 01: 1.377 / 1.380 / 123 / +9.4; 02: 4.928 / 4.931 / 87 / +10.0; 03: 9.124 / 9.127 / 106 / +10.2; 04: 10.343 / 10.346 / 112 / +10.1; 05: 11.638 / 11.641 / 77 / +9.3; 06: 12.436 / 12.439 / 74 / +10.2; 07: 13.284 / 13.287 / 86 / +9.9; 08: 20.727 / 20.730 / 88 / +12.3."
+    },
+    "fizz-loop": {
+      "files": [
+        "fizz-loop-01.wav"
+      ],
+      "loop": true,
+      "sources": [
+        {
+          "id": 240574,
+          "title": "JrF_D_AquaSelzer_test.wav",
+          "author": "blaukreuz",
+          "url": "https://freesound.org/people/blaukreuz/sounds/240574/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "Per the author: a pair of hydrophones placed in the bottom of a large glass that was then filled with carbonated water, so this is a close-up of the bubbles in the glass. The loop is a steady stretch of tiny bubble crackles (source 7.0-10.35 s, after the first seconds of pouring and the initial loud fizz): spectrum centred near 3 kHz (52% of the energy at 2-4 kHz, 16% at 4-8 kHz, about 1% above 8 kHz), discrete crackles on a soft bed, no hiss band, no narrow tonal lines, no taps inside the window. True stereo (L/R correlation about 0). 3.200 s, seamless (tiled three times: no step or level jump at the seams). Check first: being a hydrophone recording it may sound warmer or more underwater than an over-the-glass microphone. Brighter candidates were rejected as hissy (#579105, #683521, #161432) or for steady tonal whistles (#733845); #187336 and #732812 were too quiet (peaks near -40 and -50 dBFS).",
+      "process": "Source #240574 (Freesound preview -hq.mp3 decoded to 16-bit stereo WAV with ffmpeg at 48000 Hz). Loop body = source 7.000 s to 10.200 s (3.200 s). The next 150 ms of the source (10.200-10.350 s) are crossfaded into the first 150 ms of the body with an equal-power cos/sin curve, so the end of the file flows into its beginning. DC removed, 80 Hz 2nd-order Butterworth high-pass, both channels kept, peak-normalised to 0.7 (gain +8.4 dB)."
+    }
+  },
+  "missing": []
+}

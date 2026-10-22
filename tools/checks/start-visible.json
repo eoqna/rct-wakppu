@@ -1,0 +1,45 @@
+[
+ {
+  "do": "waitFor",
+  "expr": "!!window.__wakppu",
+  "ms": 20000
+ },
+ {
+  "do": "wait",
+  "ms": 800
+ },
+ {
+  "do": "expect",
+  "name": "start button fully visible in a 1280×800 window without scrolling",
+  "expr": "(() => { const r = document.querySelector('.keycap.big').getBoundingClientRect(); return r.top >= 0 && r.bottom <= window.innerHeight })()",
+  "equals": true
+ },
+ {
+  "do": "expect",
+  "name": "the difficulty chips are not hidden behind the start row",
+  "expr": "(() => { const chips = [...document.querySelectorAll('.chip')], bar = document.querySelector('.start-row').getBoundingClientRect(); return chips.every(c => c.getBoundingClientRect().bottom <= bar.top) })()",
+  "equals": true
+ },
+ {
+  "do": "eval",
+  "expr": "localStorage.setItem('wakppu.progress.rainbow.easy', JSON.stringify({ checkpoint: 1, elapsed: 30, steps: 10, savedAt: 1 })); true"
+ },
+ {
+  "do": "reload"
+ },
+ {
+  "do": "waitFor",
+  "expr": "!!window.__wakppu",
+  "ms": 20000
+ },
+ {
+  "do": "wait",
+  "ms": 800
+ },
+ {
+  "do": "expect",
+  "name": "resume button fully visible too",
+  "expr": "(() => { const r = document.querySelector('.keycap.big').getBoundingClientRect(); return document.querySelector('.keycap.big').textContent === '이어서 하기' && r.top >= 0 && r.bottom <= window.innerHeight })()",
+  "equals": true
+ }
+]

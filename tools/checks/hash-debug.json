@@ -1,0 +1,12 @@
+[
+ {
+  "do": "wait",
+  "ms": 2500
+ },
+ {
+  "do": "expect",
+  "name": "#debug turns on the debug hooks",
+  "expr": "!!window.__wakppu",
+  "equals": true
+ }
+]

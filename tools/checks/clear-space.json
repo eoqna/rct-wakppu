@@ -1,0 +1,47 @@
+[
+ {
+  "do": "waitFor",
+  "expr": "!!window.__wakppu",
+  "ms": 20000
+ },
+ {
+  "do": "wait",
+  "ms": 600
+ },
+ {
+  "do": "press",
+  "code": "Enter"
+ },
+ {
+  "do": "wait",
+  "ms": 1500
+ },
+ {
+  "do": "eval",
+  "expr": "window.__wakppu.teleport(window.__wakppu.info().goal)"
+ },
+ {
+  "do": "wait",
+  "ms": 1300
+ },
+ {
+  "do": "expect",
+  "name": "clear card shown",
+  "expr": "window.__wakppu.info().screen",
+  "equals": "cleared"
+ },
+ {
+  "do": "press",
+  "code": "Space"
+ },
+ {
+  "do": "wait",
+  "ms": 400
+ },
+ {
+  "do": "expect",
+  "name": "a Space press does not throw the result away",
+  "expr": "window.__wakppu.info().screen",
+  "equals": "cleared"
+ }
+]

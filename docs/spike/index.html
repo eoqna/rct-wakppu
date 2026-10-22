@@ -1,0 +1,1359 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>왁뿌 타워 맛보기</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap">
+<style>
+  /* Layout: one full-bleed 3D canvas, small HUD panels pinned to the corners, every control drawn as a keycap. One pastel look on purpose. */
+  :root {
+    --bg: #f7e3f1;
+    --ink: #3a2947;
+    --ink-soft: #6f5c80;
+    --paper: #fff9fc;
+    --paper-edge: #f4e4ef;
+    --paper-hover: #fbeef6;
+    --paper-glass: rgba(255, 249, 252, 0.88);
+    --keycap-side: #dcc3d7;
+    --line: rgba(58, 41, 71, 0.14);
+    --shadow: rgba(58, 41, 71, 0.16);
+    --track: rgba(58, 41, 71, 0.1);
+    --veil: rgba(58, 41, 71, 0.2);
+    --wax: #ff6fa8;
+    --wax-light: #ffa6c9;
+    --wax-side: #d9467f;
+    --wax-deep: #b8336a;
+    --soda: #4fb3ee;
+    --butter: #ffd86b;
+    --danger: #b3261e;
+    --font-display: "Jua", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    --font-body: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-body); overflow: hidden; }
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; outline: none; cursor: grab; }
+  #scene:active { cursor: grabbing; }
+
+  #ui {
+    position: fixed; inset: 0; pointer-events: none;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto 1fr auto; gap: 12px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: calc(14px + env(safe-area-inset-top, 0px)) calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+  #ui > * { min-width: 0; }
+  .panel {
+    pointer-events: auto; background: var(--paper-glass); border: 1px solid var(--line);
+    border-radius: 16px; box-shadow: 0 10px 28px var(--shadow); padding: 10px 14px;
+  }
+  .label { font-size: 12px; letter-spacing: 0.06em; color: var(--ink-soft); }
+  .num { font-family: var(--font-display); font-variant-numeric: tabular-nums; color: var(--ink); }
+
+  #meter { grid-column: 1; grid-row: 1; justify-self: start; align-self: start; display: grid; gap: 7px; width: 230px; max-width: 100%; }
+  .meter-row { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+  #height { font-size: 30px; line-height: 1; }
+  .unit { color: var(--ink-soft); font-size: 13px; }
+  .bar { height: 8px; border-radius: 99px; background: var(--track); overflow: hidden; }
+  .bar > span { display: block; height: 100%; background: linear-gradient(90deg, var(--wax), var(--butter)); transform-origin: left center; transform: scaleX(0); }
+  .meter-row.small .num { font-size: 16px; margin-right: 10px; }
+
+  #controls { grid-column: 2; grid-row: 1; align-self: start; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; max-width: 460px; }
+  .vol { display: inline-flex; align-items: center; gap: 8px; }
+  #volume { width: 110px; accent-color: var(--wax); }
+
+  #hints { grid-column: 1 / -1; grid-row: 3; justify-self: start; align-self: end; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; font-size: 13px; color: var(--ink-soft); }
+  #hints span { display: inline-flex; align-items: center; gap: 4px; }
+
+  kbd {
+    display: inline-grid; place-items: center; min-width: 1.9em; height: 1.9em; padding: 0 0.45em;
+    font-family: var(--font-display); font-size: 12px; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 6px;
+  }
+  kbd.wide { min-width: 4.4em; }
+
+  .keycap {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font-display); font-size: 15px; color: var(--ink);
+    background: linear-gradient(180deg, var(--paper), var(--paper-edge));
+    border: 1px solid var(--line); border-radius: 12px; padding: 9px 16px; cursor: pointer;
+    box-shadow: 0 4px 0 var(--keycap-side), 0 8px 16px var(--shadow);
+    transition: transform 0.06s ease, box-shadow 0.06s ease;
+  }
+  .keycap:hover { background: linear-gradient(180deg, var(--paper), var(--paper-hover)); }
+  .keycap:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--keycap-side), 0 3px 8px var(--shadow); }
+  .keycap:disabled { cursor: not-allowed; opacity: 0.5; }
+  .keycap.small { font-size: 13px; padding: 6px 10px; border-radius: 10px; }
+  .keycap.small kbd { height: 1.6em; min-width: 1.6em; font-size: 11px; border-bottom-width: 2px; }
+  .keycap.big {
+    font-size: 21px; padding: 13px 30px; color: var(--ink); border-color: transparent;
+    background: linear-gradient(180deg, var(--wax-light), var(--wax));
+    box-shadow: 0 5px 0 var(--wax-side), 0 12px 24px var(--shadow);
+  }
+  .keycap.big:active { box-shadow: 0 2px 0 var(--wax-side), 0 4px 10px var(--shadow); }
+  .keycap.ghost { background: transparent; box-shadow: none; }
+  .keycap:focus-visible, #volume:focus-visible, #scene:focus-visible { outline: 3px solid var(--soda); outline-offset: 2px; }
+
+  .overlay {
+    position: fixed; inset: 0; display: grid; place-items: center; overflow-y: auto; background: var(--veil);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+  .card {
+    width: min(440px, 100%); display: grid; gap: 12px; padding: 26px 24px 24px;
+    background: var(--paper); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 24px 60px var(--shadow);
+  }
+  .eyebrow { margin: 0; font-size: 12px; letter-spacing: 0.12em; color: var(--wax-deep); }
+  .card h1, .card h2 { margin: 0; font-family: var(--font-display); font-weight: 400; line-height: 1; text-wrap: balance; color: var(--ink); }
+  .card h1 { font-size: clamp(46px, 12vw, 66px); }
+  .card h1 span { color: var(--wax); }
+  .card h2 { font-size: 48px; }
+  .card p { margin: 0; line-height: 1.65; }
+  .note { font-size: 13px; color: var(--ink-soft); }
+  .note.error { color: var(--danger); }
+  .credit { font-size: 12px; color: var(--ink-soft); }
+  .credit a { color: var(--wax-deep); }
+  .pick { display: grid; gap: 6px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; cursor: pointer;
+    font-family: var(--font-display); font-size: 14px; color: var(--ink);
+    background: var(--paper); border: 1px solid var(--line); border-radius: 999px; box-shadow: 0 2px 0 var(--keycap-side);
+  }
+  .chip[aria-pressed="true"] { background: var(--wax-light); border-color: var(--wax); box-shadow: 0 2px 0 var(--wax-side); }
+  .chip:focus-visible { outline: 3px solid var(--soda); outline-offset: 2px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--dot, var(--wax)); box-shadow: inset 0 0 0 1px var(--line); }
+  .tag { margin-left: auto; font-family: var(--font-display); font-size: 12px; color: var(--ink); background: var(--butter); border-radius: 999px; padding: 2px 8px; }
+  /* one grid for the whole list so every description lines up in the same column */
+  .keys {
+    list-style: none; margin: 2px 0 4px; padding: 10px 14px; display: grid; grid-template-columns: max-content minmax(0, 1fr);
+    align-items: center; gap: 6px 14px; background: var(--paper-edge); border-radius: 14px; font-size: 13px;
+  }
+  .keys li { display: contents; }
+  .keys li > span:first-child { display: inline-flex; gap: 3px; color: var(--ink-soft); font-size: 13px; }
+  .card .row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .start-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 4px 0; }
+  .stats div { background: var(--paper-edge); border-radius: 14px; padding: 10px 12px; }
+  .stats dt { font-size: 12px; color: var(--ink-soft); }
+  .stats dd { margin: 2px 0 0; font-size: 26px; }
+
+  .toast {
+    grid-column: 1 / -1; grid-row: 2; justify-self: center; align-self: start; margin-top: 8px;
+    font-family: var(--font-display); font-size: 18px; color: var(--ink);
+    background: var(--butter); border-radius: 999px; padding: 8px 18px; box-shadow: 0 8px 20px var(--shadow);
+  }
+
+  @media (max-width: 640px) {
+    #ui { grid-template-columns: minmax(0, 1fr); }
+    #controls { grid-column: 1; grid-row: 2; justify-self: start; justify-content: flex-start; }
+    #hints { display: none; }
+    .toast { grid-row: 3; align-self: end; }
+  }
+  @media (prefers-reduced-motion: reduce) { .keycap { transition: none; } }
+</style>
+
+<canvas id="scene" tabindex="0" aria-label="왁뿌 타워 3D 화면"></canvas>
+
+<div id="ui">
+  <section id="meter" class="panel" aria-label="진행 상황">
+    <div class="meter-row"><span class="label">높이</span><strong id="height" class="num">0.0</strong><span class="unit">m / <span id="goalHeight">17</span> m</span><span id="diffTag" class="tag">쉬움</span></div>
+    <div class="bar"><span id="bar"></span></div>
+    <div class="meter-row small"><span class="label">밟은 발판</span><strong id="steps" class="num">0</strong><span class="label">시간</span><strong id="time" class="num">00:00</strong></div>
+  </section>
+
+  <section id="controls" class="panel" aria-label="설정">
+    <span class="vol"><label for="volume" class="label">소리 크기</label><input id="volume" type="range" min="0" max="100" value="70"></span>
+    <button id="mute" class="keycap small" type="button"><span id="muteLabel">소리 끄기</span><kbd>M</kbd></button>
+    <button id="respawnBtn" class="keycap small" type="button">체크포인트로<kbd>R</kbd></button>
+    <button id="menuBtn" class="keycap small" type="button">처음 화면<kbd>Esc</kbd></button>
+  </section>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden>체크포인트 저장</div>
+
+  <section id="hints" class="panel" aria-label="조작법">
+    <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 이동</span>
+    <span><kbd class="wide">Space</kbd> 점프</span>
+    <span>마우스 드래그로 시점 돌리기, 휠로 줌</span>
+  </section>
+</div>
+
+<div id="start" class="overlay">
+  <div class="card">
+    <p class="eyebrow">버릴 셈 치고 만든 3D 맛보기</p>
+    <h1><span>왁뿌</span> 타워</h1>
+    <p>키보드 발판, 왁뿌볼, 탄산 젤리를 밟으며 꼭대기 트로피까지 올라가 보세요.</p>
+    <p class="note">키보드 발판과 왁뿌볼이 깨지는 소리는 실제로 녹음한 소리이고, 나머지는 브라우저가 그 자리에서 합성한 임시 소리예요. 이어폰을 끼면 더 잘 들려요.</p>
+    <div class="pick" role="group" aria-labelledby="charLabel">
+      <span id="charLabel" class="label">캐릭터</span>
+      <div id="charChips" class="chips"></div>
+    </div>
+    <div class="pick" role="group" aria-labelledby="diffLabel">
+      <span id="diffLabel" class="label">난이도</span>
+      <div id="diffChips" class="chips"></div>
+      <p id="diffNote" class="note"></p>
+    </div>
+    <div class="start-row">
+      <button id="startBtn" class="keycap big" type="button">시작하기</button>
+      <span class="note">또는 <kbd>Enter</kbd></span>
+    </div>
+    <ul class="keys">
+      <li><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span>이동 (방향키도 돼요)</li>
+      <li><span><kbd class="wide">Space</kbd></span>점프</li>
+      <li><span>마우스 드래그</span>시점 돌리기, 휠은 줌</li>
+      <li><span><kbd>R</kbd></span>마지막 체크포인트로</li>
+      <li><span><kbd>M</kbd></span>소리 끄기</li>
+      <li><span><kbd>Esc</kbd></span>처음 화면 (캐릭터, 난이도 바꾸기)</li>
+    </ul>
+    <p class="note">카메라는 마우스로 돌릴 때만 움직이고, 이동은 화면 기준이에요.</p>
+    <p id="touchNote" class="note" hidden>이 맛보기는 키보드로 조작해요. PC에서 열어 주세요.</p>
+    <p id="glError" class="note error" hidden>이 브라우저에서는 3D 화면을 켤 수 없어요. 최신 Chrome이나 Edge에서 열어 주세요.</p>
+    <p class="credit">소리 출처 (모두 CC0 퍼블릭 도메인): 키보드 <a href="https://freesound.org/people/simeonradivoev/sounds/638035/" target="_blank" rel="noopener">simeonradivoev</a>, 왁뿌볼 <a href="https://freesound.org/people/Anthousai/sounds/336633/" target="_blank" rel="noopener">Anthousai</a> (Freesound)</p>
+  </div>
+</div>
+
+<div id="clear" class="overlay" hidden>
+  <div class="card">
+    <p class="eyebrow">꼭대기 도착</p>
+    <h2>클리어!</h2>
+    <dl class="stats">
+      <div><dt>걸린 시간</dt><dd id="clearTime" class="num">00:00</dd></div>
+      <div><dt>밟은 발판</dt><dd id="clearSteps" class="num">0번</dd></div>
+    </dl>
+    <div class="row">
+      <button id="againBtn" class="keycap" type="button">처음부터 다시</button>
+      <button id="menuBtn2" class="keycap" type="button">처음 화면으로</button>
+      <button id="stayBtn" class="keycap ghost" type="button">계속 둘러보기</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
+
+const $ = (id) => document.getElementById(id);
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const rand = (a, b) => a + Math.random() * (b - a);
+const damp = (rate, dt) => 1 - Math.exp(-rate * dt);
+const approach = (v, target, step) => (v < target ? Math.min(v + step, target) : Math.max(v - step, target));
+const lerpAngle = (a, b, t) => {
+  let d = (b - a) % (Math.PI * 2);
+  if (d > Math.PI) d -= Math.PI * 2;
+  if (d < -Math.PI) d += Math.PI * 2;
+  return a + d * t;
+};
+const fmtTime = (s) => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+
+if (matchMedia('(hover: none) and (pointer: coarse)').matches) $('touchNote').hidden = false;
+
+/* ---------- Sound: every sound is synthesized with Web Audio, no files ---------- */
+const Sound = (() => {
+  let ctx = null, master = null, noiseBuf = null, fizzGain = null, keyBank = null, crunchBank = null;
+  let volume = 0.7, muted = false;
+
+  function init() {
+    try {
+      if (!ctx) {
+        ctx = new (window.AudioContext || window.webkitAudioContext)();
+        // the compressor keeps sharp transients from stabbing the ears
+        const comp = ctx.createDynamicsCompressor();
+        comp.threshold.value = -20; comp.knee.value = 10; comp.ratio.value = 8;
+        comp.attack.value = 0.002; comp.release.value = 0.12;
+        master = ctx.createGain();
+        master.gain.value = muted ? 0 : volume;
+        master.connect(comp); comp.connect(ctx.destination);
+        // a small room so the dry synth hits sound recorded rather than electronic
+        const room = ctx.createConvolver(), roomGain = ctx.createGain();
+        room.buffer = makeRoom(0.35, 0.06); roomGain.gain.value = 0.12;
+        master.connect(room); room.connect(roomGain); roomGain.connect(comp);
+        const len = ctx.sampleRate * 2;
+        noiseBuf = ctx.createBuffer(1, len, ctx.sampleRate);
+        const ch = noiseBuf.getChannelData(0);
+        for (let i = 0; i < len; i++) ch[i] = Math.random() * 2 - 1;
+        const bed = ctx.createBufferSource(); bed.buffer = noiseBuf; bed.loop = true;
+        const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 5200;
+        fizzGain = ctx.createGain(); fizzGain.gain.value = 0;
+        bed.connect(hp); hp.connect(fizzGain); fizzGain.connect(master); bed.start();
+        keyBank = buildKeyBank();
+        useRecordings();
+      }
+      if (ctx.state === 'suspended') ctx.resume();
+    } catch (err) { ctx = null; }
+  }
+  const ready = () => !!ctx && ctx.state === 'running';
+  const now = () => ctx.currentTime + 0.004;
+
+  function env(g, t, peak, attack, decay) {
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(peak, t + attack);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + attack + decay);
+  }
+  function noise(t, decay, { type = 'bandpass', freq = 2000, Q = 1, gain = 0.3, attack = 0.001, sweepTo = 0, pan = 0 } = {}) {
+    const src = ctx.createBufferSource(); src.buffer = noiseBuf;
+    const f = ctx.createBiquadFilter(); f.type = type; f.Q.value = Q;
+    f.frequency.setValueAtTime(freq, t);
+    if (sweepTo) f.frequency.exponentialRampToValueAtTime(sweepTo, t + attack + decay);
+    const g = ctx.createGain(); env(g, t, gain, attack, decay);
+    src.connect(f); f.connect(g);
+    if (pan) { const sp = ctx.createStereoPanner(); sp.pan.value = pan; g.connect(sp); sp.connect(master); } else g.connect(master);
+    src.start(t, rand(0, 1.6)); src.stop(t + attack + decay + 0.03);
+  }
+  function tone(t, decay, { type = 'sine', from = 440, to = 0, sweep = 0, gain = 0.3, attack = 0.002 } = {}) {
+    const o = ctx.createOscillator(); o.type = type;
+    o.frequency.setValueAtTime(from, t);
+    if (to) o.frequency.exponentialRampToValueAtTime(to, t + (sweep || decay));
+    const g = ctx.createGain(); env(g, t, gain, attack, decay);
+    o.connect(g); g.connect(master);
+    o.start(t); o.stop(t + attack + decay + 0.03);
+  }
+
+  // Keystrokes are rendered once into buffers: a contact click plus a few short
+  // plastic resonances that ring and die without any pitch glide.
+  function renderHit(events, len) {
+    const sr = ctx.sampleRate, n = Math.floor(sr * len);
+    const buf = ctx.createBuffer(1, n, sr), d = buf.getChannelData(0);
+    for (const ev of events) {
+      const i0 = Math.floor(ev.t0 * sr);
+      for (const m of ev.modes) {
+        const w = 2 * Math.PI * m.f;
+        for (let i = i0; i < n; i++) { const t = (i - i0) / sr; d[i] += m.a * Math.exp(-t / m.tau) * Math.sin(w * t); }
+      }
+      const end = Math.min(n, i0 + Math.ceil(sr * ev.clickTau * 8));
+      let prev = 0;
+      for (let i = i0; i < end; i++) {
+        const t = (i - i0) / sr, w = Math.random() * 2 - 1;
+        d[i] += ev.click * (w - prev) * Math.exp(-t / ev.clickTau);
+        prev = w;
+      }
+    }
+    let peak = 0;
+    for (let i = 0; i < n; i++) peak = Math.max(peak, Math.abs(d[i]));
+    const g = 0.9 / (peak || 1), fade = Math.floor(sr * 0.004);
+    for (let i = 0; i < n; i++) d[i] *= g * (i > n - fade ? (n - i) / fade : 1);
+    return buf;
+  }
+  function buildKeyBank() {
+    const set = (make) => Array.from({ length: 6 }, () => make(rand(0.93, 1.07)));
+    return {
+      // deep, muted bottom-out ("도각")
+      thock: set((k) => renderHit([{ t0: 0, click: 0.5, clickTau: 0.0006, modes: [
+        { f: 340 * k, a: 0.55, tau: 0.016 }, { f: 615 * k, a: 0.35, tau: 0.011 }, { f: 1180 * k, a: 0.3, tau: 0.007 },
+        { f: 2250 * k, a: 0.2, tau: 0.004 }, { f: 3600 * k, a: 0.1, tau: 0.0025 }] }], 0.12)),
+      thockUp: set((k) => renderHit([{ t0: 0, click: 0.35, clickTau: 0.0004, modes: [
+        { f: 880 * k, a: 0.25, tau: 0.006 }, { f: 2050 * k, a: 0.22, tau: 0.004 }, { f: 3900 * k, a: 0.1, tau: 0.002 }] }], 0.06)),
+      // click jacket snaps first, the keycap bottoms out a few ms later ("찰칵")
+      clicky: set((k) => renderHit([
+        { t0: 0, click: 0.6, clickTau: 0.0004, modes: [{ f: 4300 * k, a: 0.45, tau: 0.0018 }, { f: 6900 * k, a: 0.25, tau: 0.0012 }] },
+        { t0: 0.009 * k, click: 0.4, clickTau: 0.0006, modes: [
+          { f: 760 * k, a: 0.25, tau: 0.009 }, { f: 1650 * k, a: 0.4, tau: 0.006 }, { f: 2900 * k, a: 0.3, tau: 0.004 }] },
+      ], 0.1)),
+      clickyUp: set((k) => renderHit([
+        { t0: 0, click: 0.5, clickTau: 0.0004, modes: [{ f: 4700 * k, a: 0.4, tau: 0.0015 }, { f: 7400 * k, a: 0.2, tau: 0.001 }] },
+        { t0: 0.006, click: 0.2, clickTau: 0.0004, modes: [{ f: 2300 * k, a: 0.2, tau: 0.003 }] },
+      ], 0.05)),
+    };
+  }
+  function makeRoom(len, tau) {
+    const sr = ctx.sampleRate, n = Math.floor(sr * len), buf = ctx.createBuffer(2, n, sr);
+    for (let c = 0; c < 2; c++) {
+      const d = buf.getChannelData(c);
+      for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / sr / tau);
+    }
+    return buf;
+  }
+  // Recorded sounds, all CC0 from Freesound: blue-switch keystrokes (#638035 by simeonradivoev)
+  // and dried-eggshell crunches for the wax balls (#336633 by Anthousai), each sliced into single hits.
+  // The synthesized sounds stay as the fallback for any group that cannot load.
+  const numbered = (name, count) => Array.from({ length: count }, (_, i) => `sounds/${name}-${String(i + 1).padStart(2, '0')}.wav`);
+  const SAMPLE_FILES = [numbered('blue-press', 10), numbered('blue-release', 6), numbered('wax-crunch', 7)];
+  const sampleBytes = Promise.all(SAMPLE_FILES.map((list) => Promise.all(list.map((url) =>
+    fetch(url).then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(new Error(url)))))).catch(() => null)));
+  // each group switches over as soon as it is decoded
+  async function useRecordings() {
+    const [press, release, crunch] = await sampleBytes;
+    if (!ctx) return;
+    const decode = (list) => Promise.all(list.map((b) => ctx.decodeAudioData(b.slice(0))));
+    if (press && release) {
+      Promise.all([decode(press), decode(release)])
+        .then(([p, r]) => { keyBank = { ...keyBank, thock: p, clicky: p, thockUp: r, clickyUp: r }; })
+        .catch(() => { /* keep the synthesized keys */ });
+    }
+    if (crunch) decode(crunch).then((c) => { crunchBank = c; }).catch(() => { /* keep the synthesized crunch */ });
+  }
+  function playHit(name, gain, delay = 0, rate = 1) {
+    if (!keyBank) return;
+    const list = keyBank[name], src = ctx.createBufferSource();
+    src.buffer = list[Math.floor(Math.random() * list.length)];
+    src.playbackRate.value = rate * rand(0.97, 1.03);
+    const g = ctx.createGain(); g.gain.value = gain;
+    const sp = ctx.createStereoPanner(); sp.pan.value = rand(-0.2, 0.2);
+    src.connect(g); g.connect(sp); sp.connect(master);
+    src.start(now() + delay);
+  }
+
+  const play = {
+    // white keycaps sit a little lower in pitch than the coloured bridge;
+    // the upstroke lands a beat after the foot leaves, like a finger lifting
+    thock() { playHit('thock', 0.7, 0, 0.94); },
+    thockUp() { playHit('thockUp', 0.32, 0.06, 0.94); },
+    clicky() { playHit('clicky', 0.7, 0, 1.04); },
+    clickyUp() { playHit('clickyUp', 0.32, 0.05, 1.04); },
+    crumble() { // a broken ball giving way on the hard setting: a smaller, lower crunch
+      if (!crunchBank) { play.squish(); return; }
+      const src = ctx.createBufferSource();
+      src.buffer = crunchBank[Math.floor(Math.random() * crunchBank.length)];
+      src.playbackRate.value = rand(0.72, 0.82);
+      const g = ctx.createGain(); g.gain.value = 0.45;
+      src.connect(g); g.connect(master); src.start(now());
+    },
+    crunch() { // wax shell cracking: a recorded crunch, else a synthesized snap and crackles across both ears
+      if (crunchBank) {
+        const src = ctx.createBufferSource();
+        src.buffer = crunchBank[Math.floor(Math.random() * crunchBank.length)];
+        src.playbackRate.value = rand(0.92, 1.08);
+        const g = ctx.createGain(); g.gain.value = 0.9;
+        src.connect(g); g.connect(master); src.start(now());
+        return;
+      }
+      const t = now(), n = 16 + Math.floor(rand(0, 8)), span = rand(0.22, 0.34);
+      noise(t, 0.008, { type: 'highpass', freq: 2200, Q: 0.8, gain: 0.45 });
+      tone(t, 0.09, { from: 140, to: 70, gain: 0.22 });
+      noise(t, 0.2, { type: 'highpass', freq: 2600, Q: 0.7, gain: 0.05 });
+      for (let i = 0; i < n; i++) {
+        const k = i / n;
+        noise(t + 0.01 + Math.pow(k, 1.4) * span + rand(0, 0.01), rand(0.004, 0.014),
+          { freq: rand(1600, 7000), Q: rand(1.5, 4), gain: rand(0.12, 0.42) * (1 - k * 0.5), pan: rand(-0.6, 0.6) });
+      }
+    },
+    squish() { // the soft inside once the shell is broken
+      const t = now(), p = rand(0.9, 1.1);
+      noise(t, 0.2, { type: 'lowpass', freq: 1500 * p, sweepTo: 320, Q: 5, gain: 0.3, attack: 0.018 });
+      tone(t, 0.15, { from: 210 * p, to: 115, gain: 0.12, attack: 0.01 });
+    },
+    blub() {
+      tone(now(), 0.09, { from: rand(230, 320), to: rand(720, 980), sweep: 0.06, gain: 0.24 });
+    },
+    fizzTick() {
+      tone(now() + rand(0, 0.02), rand(0.018, 0.035), { from: rand(1500, 2700), to: rand(3000, 4600), sweep: 0.015, gain: rand(0.02, 0.055) });
+    },
+    chime() {
+      const t = now();
+      tone(t, 1.1, { from: 1318.5, gain: 0.16, attack: 0.004 });
+      tone(t + 0.09, 1.3, { from: 1975.5, gain: 0.12, attack: 0.004 });
+      tone(t, 0.5, { type: 'triangle', from: 659.3, gain: 0.05 });
+    },
+    jump() { tone(now(), 0.07, { from: 300, to: 520, gain: 0.04 }); },
+    thud() {
+      const t = now();
+      tone(t, 0.1, { from: 140, to: 70, gain: 0.14 });
+      noise(t, 0.05, { type: 'lowpass', freq: 600, gain: 0.08 });
+    },
+    fanfare() {
+      const t = now();
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(t + i * 0.12, 0.6, { type: 'triangle', from: f, gain: 0.16, attack: 0.01 }));
+      tone(t + 0.5, 1.4, { from: 1318.5, gain: 0.08, attack: 0.01 });
+    },
+  };
+  function fire(name) { if (ready()) { try { play[name](); } catch (err) { /* skip a dropped sound */ } } }
+  function setFizz(on) { if (ready() && fizzGain) fizzGain.gain.setTargetAtTime(on ? 0.045 : 0, ctx.currentTime, on ? 0.08 : 0.15); }
+  function setVolume(v) { volume = v; if (master) master.gain.setTargetAtTime(muted ? 0 : v, ctx.currentTime, 0.03); }
+  function toggleMute() { muted = !muted; setVolume(volume); return muted; }
+  return { init, fire, setFizz, setVolume, toggleMute };
+})();
+
+/* ---------- Renderer and scene ---------- */
+const canvas = $('scene');
+let renderer = null;
+try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); } catch (err) { renderer = null; }
+if (!renderer) {
+  $('glError').hidden = false; $('startBtn').disabled = true;
+  throw new Error('WebGL unavailable');
+}
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 220);
+function resize() {
+  const w = canvas.clientWidth || window.innerWidth, h = canvas.clientHeight || window.innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+function canvasTexture(w, h, draw) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  draw(c.getContext('2d'), w, h);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+  return tex;
+}
+function checkerTexture(a, b) {
+  const tex = canvasTexture(128, 128, (g) => {
+    g.fillStyle = a; g.fillRect(0, 0, 128, 128);
+    g.fillStyle = b; g.fillRect(0, 0, 64, 64); g.fillRect(64, 64, 64, 64);
+  });
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  return tex;
+}
+scene.background = canvasTexture(4, 256, (g, w, h) => {
+  const grd = g.createLinearGradient(0, 0, 0, h);
+  grd.addColorStop(0, '#bfe2ff'); grd.addColorStop(0.55, '#f5d8f1'); grd.addColorStop(1, '#ffe6d3');
+  g.fillStyle = grd; g.fillRect(0, 0, w, h);
+});
+scene.add(new THREE.HemisphereLight(0xfff4fa, 0xcdbbe6, 2.1));
+const sun = new THREE.DirectionalLight(0xffffff, 1.7);
+sun.position.set(8, 16, 6);
+scene.add(sun);
+
+try { await Promise.race([document.fonts.load('64px Jua'), new Promise((r) => setTimeout(r, 1500))]); } catch (err) { /* system font fallback */ }
+
+/* ---------- Geometry ---------- */
+function roundedRectShape(w, d, r) {
+  const s = new THREE.Shape(), x = -w / 2, y = -d / 2;
+  s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+  s.lineTo(x + w, y + d - r); s.quadraticCurveTo(x + w, y + d, x + w - r, y + d);
+  s.lineTo(x + r, y + d); s.quadraticCurveTo(x, y + d, x, y + d - r);
+  s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
+  return s;
+}
+// soft block with its origin at the bottom centre, for keycaps and jelly
+function softBlock(w, h, d, corner = 0.2, bevel = 0.09) {
+  const g = new THREE.ExtrudeGeometry(roundedRectShape(w - 2 * bevel, d - 2 * bevel, corner), {
+    depth: h - 2 * bevel, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 3, curveSegments: 6,
+  });
+  g.rotateX(-Math.PI / 2);
+  g.computeBoundingBox();
+  g.translate(0, -g.boundingBox.min.y, 0);
+  return g;
+}
+const letterCache = new Map();
+function letterTexture(ch, color) {
+  const key = ch + color;
+  if (!letterCache.has(key)) {
+    letterCache.set(key, canvasTexture(128, 128, (g, w, h) => {
+      g.fillStyle = color; g.font = '76px Jua, "Apple SD Gothic Neo", sans-serif';
+      g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(ch, w / 2, h / 2 + 4);
+    }));
+  }
+  return letterCache.get(key);
+}
+const flowerTexture = canvasTexture(256, 256, (g, w, h) => {
+  g.translate(w / 2, h / 2);
+  g.fillStyle = '#ff9cc4';
+  for (let i = 0; i < 8; i++) {
+    g.save(); g.rotate((i / 8) * Math.PI * 2);
+    g.beginPath(); g.ellipse(0, -62, 30, 46, 0, 0, Math.PI * 2); g.fill();
+    g.restore();
+  }
+  g.fillStyle = '#ffd86b'; g.beginPath(); g.arc(0, 0, 40, 0, Math.PI * 2); g.fill();
+});
+function makeTrophy() {
+  const gold = new THREE.MeshStandardMaterial({ color: '#ffc93c', metalness: 0.55, roughness: 0.28 });
+  const g = new THREE.Group();
+  const profile = [[0, 0], [0.34, 0], [0.36, 0.08], [0.12, 0.14], [0.09, 0.42], [0.2, 0.52], [0.44, 0.78], [0.48, 1.08], [0.43, 1.1]]
+    .map(([x, y]) => new THREE.Vector2(x, y));
+  g.add(new THREE.Mesh(new THREE.LatheGeometry(profile, 40), gold));
+  for (const s of [-1, 1]) {
+    const handle = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.045, 10, 24, Math.PI), gold);
+    handle.position.set(0.46 * s, 0.86, 0); handle.rotation.z = -s * Math.PI / 2;
+    g.add(handle);
+  }
+  const star = new THREE.Mesh(new THREE.OctahedronGeometry(0.22),
+    new THREE.MeshStandardMaterial({ color: '#ff9cc4', emissive: '#ff6fa8', emissiveIntensity: 0.4, roughness: 0.4 }));
+  star.position.y = 1.55; star.name = 'star';
+  g.add(star);
+  g.position.y = 0.4; g.name = 'trophy';
+  return g;
+}
+
+/* ---------- Tower ---------- */
+const R = 4.6, PILLAR_R = 2.2, FLOOR_R = 40;
+const KEY = { w: 1.3, h: 0.55 };
+const geo = {
+  key: softBlock(KEY.w, KEY.h, KEY.w),
+  soda: softBlock(1.8, 0.75, 1.8, 0.35, 0.16),
+  wax: new THREE.SphereGeometry(0.92, 36, 24).translate(0, 0.92, 0),
+  waxCore: new THREE.SphereGeometry(0.8, 28, 18).translate(0, 0.8, 0),
+  pad: new THREE.CylinderGeometry(1.3, 1.38, 0.3, 48).translate(0, 0.15, 0),
+  goal: new THREE.CylinderGeometry(1.9, 2.0, 0.4, 56).translate(0, 0.2, 0),
+  letter: new THREE.PlaneGeometry(0.78, 0.78).rotateX(-Math.PI / 2),
+  decal: new THREE.PlaneGeometry(2.1, 2.1).rotateX(-Math.PI / 2),
+};
+const platforms = [], colliders = [], occluders = [], checkpoints = [];
+
+// t is the angle along a clockwise spiral; top is the standing height
+function addPlatform(type, t, top, opts = {}) {
+  const r = opts.r ?? R;
+  const x = r * Math.cos(t), z = -r * Math.sin(t);
+  const yaw = Math.atan2(Math.cos(t), -Math.sin(t));
+  const group = new THREE.Group(), body = new THREE.Group();
+  group.position.set(x, 0, z); group.rotation.y = yaw; group.add(body);
+  let mesh, core = null, half, topRest, botRest = 0;
+  if (type === 'key' || type === 'clicky') {
+    mesh = new THREE.Mesh(geo.key, new THREE.MeshStandardMaterial({ color: opts.color ?? '#fffaf2', roughness: 0.6 }));
+    if (opts.letter) {
+      const ink = type === 'key' ? '#9b89a8' : '#5b4668';
+      const label = new THREE.Mesh(geo.letter, new THREE.MeshBasicMaterial({
+        map: letterTexture(opts.letter, ink), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2,
+      }));
+      label.position.y = KEY.h + 0.003;
+      body.add(label);
+    }
+    half = KEY.w / 2; topRest = KEY.h;
+  } else if (type === 'wax') {
+    // glossy shell that bursts on the first step, with a paler, softer core inside
+    mesh = new THREE.Mesh(geo.wax, new THREE.MeshPhysicalMaterial({ color: opts.color, roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.18, side: THREE.DoubleSide }));
+    core = new THREE.Mesh(geo.waxCore, new THREE.MeshStandardMaterial({ color: new THREE.Color(opts.color).lerp(new THREE.Color('#ffffff'), 0.55), roughness: 0.8 }));
+    body.add(core);
+    half = 0.66; topRest = 1.7; botRest = 0.32;
+  } else if (type === 'soda') {
+    mesh = new THREE.Mesh(geo.soda, new THREE.MeshPhysicalMaterial({ color: opts.color, roughness: 0.12, clearcoat: 1, transparent: true, opacity: 0.8 }));
+    half = 0.9; topRest = 0.75;
+  } else if (type === 'check' || type === 'pad') {
+    // a pad is a checkpoint disc without the flower, used where a setting drops that checkpoint
+    mesh = new THREE.Mesh(geo.pad, new THREE.MeshStandardMaterial({ color: type === 'check' ? '#fff3e6' : '#f3e4ef', roughness: 0.7, emissive: '#ffd86b', emissiveIntensity: 0 }));
+    if (type === 'check') {
+      const decal = new THREE.Mesh(geo.decal, new THREE.MeshBasicMaterial({
+        map: flowerTexture, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2,
+      }));
+      decal.position.y = 0.303;
+      body.add(decal);
+    }
+    half = 0.98; topRest = 0.3;
+  } else {
+    mesh = new THREE.Mesh(geo.goal, new THREE.MeshStandardMaterial({ color: '#ffe08a', roughness: 0.55 }));
+    body.add(makeTrophy());
+    half = 1.4; topRest = 0.4;
+  }
+  body.add(mesh);
+  const bottomY = top - topRest;
+  group.position.y = bottomY;
+  scene.add(group);
+  const c = { cx: x, cz: z, hx: half, hz: half, cos: Math.cos(yaw), sin: Math.sin(yaw), top, bottom: bottomY + botRest, plat: null, off: false };
+  const plat = {
+    type, t, opts, group, body, mesh, core, c, bottomY, topRest, botRest, sy: 1, svy: 0, target: 1, press: 0, pressTarget: 0,
+    cracked: false, active: false, grow: 1, regenAt: 0, collapseAt: 0, collapsed: false, shrink: 0,
+  };
+  c.plat = plat;
+  platforms.push(plat); colliders.push(c); occluders.push(mesh);
+  return plat;
+}
+
+const PASTEL = ['#ffb3cf', '#ffc9a8', '#ffe59a', '#b8ecc9', '#a9dcff', '#cdb8ff'];
+// Each setting stretches only the jumps; keys that sit side by side in a staircase or bridge stay put.
+const DIFFICULTY = {
+  easy: { label: '쉬움', gap: 1, rise: 1, saves: [0, 1, 2], collapse: 0, note: '지금까지 오르던 탑이에요. 체크포인트 3곳.' },
+  normal: { label: '보통', gap: 1.25, rise: 1.15, saves: [0, 2], collapse: 0, note: '발판 사이가 넓고 단차가 높아요. 체크포인트 2곳.' },
+  hard: { label: '어려움', gap: 1.45, rise: 1.3, saves: [0], collapse: 0.7, note: '틈이 더 넓고 높아요. 깨진 왁뿌볼은 1초도 안 돼 무너지고, 체크포인트는 출발점뿐이에요.' },
+};
+let diffKey = null, diff = DIFFICULTY.easy, goal = null, goalTop = 17, pillarH = 20, trophy = null, star = null;
+const pillarTex = checkerTexture('#f8e6f2', '#eed3e7');
+const pillar = new THREE.Mesh(new THREE.CylinderGeometry(PILLAR_R, PILLAR_R, 1, 48), new THREE.MeshStandardMaterial({ map: pillarTex, roughness: 0.9 }));
+scene.add(pillar);
+
+function buildLevel(key) {
+  diffKey = key; diff = DIFFICULTY[key];
+  for (const p of platforms) scene.remove(p.group);
+  platforms.length = 0; colliders.length = 0; occluders.length = 0; checkpoints.length = 0;
+  let cursorT = 0, cursorTop = 0.3;
+  const next = (type, arc, rise, opts) => {
+    const jump = arc > 1.5;
+    cursorT += (jump ? arc * diff.gap : arc) / R;
+    cursorTop += jump ? rise * diff.rise : rise;
+    return addPlatform(type, cursorT, cursorTop, opts);
+  };
+  const savePad = (index, arc, rise) => {
+    if (!diff.saves.includes(index)) return next('pad', arc, rise);
+    const cp = next('check', arc, rise, { index: checkpoints.length });
+    checkpoints.push(cp);
+    return cp;
+  };
+
+  checkpoints.push(addPlatform('check', 0, 0.3, { index: 0 }));
+  [...'ASMR~!'].forEach((ch, i) => next('key', i ? 1.36 : 1.95, 0.3, { letter: ch }));
+  for (let i = 0; i < 5; i++) next('wax', 2.3, 0.75, { color: PASTEL[i], r: R + (i % 2 ? 0.35 : -0.25) });
+  savePad(1, 2.4, 0.6);
+  [...'WAKPPU'].forEach((ch, i) => next('clicky', i ? 1.36 : 2.0, 0, { letter: ch, color: PASTEL[i] }));
+  for (let i = 0; i < 4; i++) next('soda', i ? 2.6 : 2.55, 0.85, { color: i % 2 ? '#bdf0db' : '#a6dcff' });
+  savePad(2, 2.7, 0.7);
+  next('wax', 2.4, 0.8, { color: PASTEL[5], r: R + 0.3 });
+  next('key', 2.2, 0.7, { letter: 'Z' });
+  next('wax', 2.3, 0.8, { color: PASTEL[1], r: R - 0.3 });
+  next('soda', 2.5, 0.8, { color: '#a6dcff' });
+  [...'ㅋㅋㅋ'].forEach((ch, i) => next('clicky', i ? 1.36 : 2.25, 0.3, { letter: ch, color: PASTEL[(i + 2) % 6] }));
+  next('wax', 2.3, 0.8, { color: PASTEL[0], r: R + 0.3 });
+  [...'TOP!'].forEach((ch, i) => next('key', i ? 1.36 : 2.05, 0.3, { letter: ch }));
+  goal = next('goal', 2.75, 0.6);
+  goalTop = goal.c.top;
+  trophy = goal.body.getObjectByName('trophy'); star = goal.body.getObjectByName('star');
+
+  pillarH = goalTop + 3;
+  pillar.geometry.dispose();
+  pillar.geometry = new THREE.CylinderGeometry(PILLAR_R, PILLAR_R, pillarH, 48);
+  pillar.position.y = pillarH / 2;
+  pillarTex.repeat.set(8, Math.round(pillarH / 1.7));
+  occluders.push(pillar);
+
+  currentCp = 0;
+  checkpoints[0].active = true; checkpoints[0].mesh.material.emissiveIntensity = 0.45;
+  $('goalHeight').textContent = goalTop.toFixed(0);
+  $('diffTag').textContent = diff.label;
+}
+const floorTex = checkerTexture('#fbe8d8', '#f2d9c6');
+floorTex.repeat.set(20, 20);
+const floor = new THREE.Mesh(new THREE.CircleGeometry(FLOOR_R, 72), new THREE.MeshStandardMaterial({ map: floorTex, roughness: 1 }));
+floor.rotation.x = -Math.PI / 2;
+scene.add(floor);
+const FLOOR = { top: 0, plat: { type: 'floor' } };
+
+const clouds = new THREE.Group();
+{
+  const cloudGeo = new THREE.SphereGeometry(1, 18, 12), cloudMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 1 });
+  for (let i = 0; i < 10; i++) {
+    const puff = new THREE.Group(), a = (i / 10) * Math.PI * 2 + rand(-0.25, 0.25), r = rand(15, 23);
+    puff.position.set(Math.cos(a) * r, rand(1, 26), Math.sin(a) * r);
+    for (let j = 0; j < 4; j++) {
+      const s = new THREE.Mesh(cloudGeo, cloudMat);
+      s.position.set(rand(-1.7, 1.7), rand(-0.3, 0.4), rand(-0.7, 0.7)); s.scale.setScalar(rand(0.8, 1.5));
+      puff.add(s);
+    }
+    clouds.add(puff);
+  }
+}
+scene.add(clouds);
+
+/* ---------- Player ---------- */
+const PLAYER_R = 0.34, PLAYER_H = 1.45, GRAV = 26, JUMP_V = 9.4, RUN = 4.8, STEP_UP = 0.36, COYOTE = 0.1, MAX_FALL = 24;
+const SUPPORT_R2 = (PLAYER_R * 0.8) ** 2; // how far the centre may hang past an edge and still stand on it
+const player = {
+  pos: new THREE.Vector3(), vel: new THREE.Vector3(), grounded: false, groundCollider: null, groundPlat: null,
+  coyote: 0, jumpBuf: 0, facing: Math.PI, sy: 1, svy: 0,
+};
+const avatar = new THREE.Group(), avatarBody = new THREE.Group();
+avatar.add(avatarBody); scene.add(avatar);
+function addFace(g, y, z, spread = 0.12) {
+  const dark = new THREE.MeshBasicMaterial({ color: '#3a2947' }), blush = new THREE.MeshBasicMaterial({ color: '#ff9cc4' });
+  for (const s of [-1, 1]) {
+    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 8), dark);
+    eye.position.set(spread * s, y, z); g.add(eye);
+    const cheek = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 8), blush);
+    cheek.position.set((spread + 0.09) * s, y - 0.12, z + 0.005); cheek.scale.set(1, 0.6, 0.4); g.add(cheek);
+  }
+}
+// Characters only change the look; all of them share the same collision capsule and moves.
+const CHARACTERS = [
+  { id: 'wakppu', label: '왁뿌', dot: '#ff6fa8', build() {
+    const g = new THREE.Group();
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.36, 0.7, 8, 20), new THREE.MeshStandardMaterial({ color: '#fff6ec', roughness: 0.55 }));
+    torso.position.y = 0.71; g.add(torso);
+    addFace(g, 1.1, 0.34);
+    const stalk = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.22, 8), new THREE.MeshBasicMaterial({ color: '#3a2947' }));
+    stalk.position.y = 1.52; g.add(stalk);
+    const bead = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 12), new THREE.MeshPhysicalMaterial({ color: '#ff6fa8', roughness: 0.3, clearcoat: 1 }));
+    bead.position.y = 1.66; g.add(bead);
+    return g;
+  } },
+  { id: 'keycap', label: '키캡이', dot: '#7cc8ff', build() {
+    const g = new THREE.Group();
+    g.add(new THREE.Mesh(softBlock(0.78, 0.95, 0.78, 0.2, 0.1), new THREE.MeshStandardMaterial({ color: '#d4ecff', roughness: 0.5 })));
+    const cap = new THREE.Mesh(softBlock(0.64, 0.28, 0.64, 0.14, 0.07), new THREE.MeshStandardMaterial({ color: '#7cc8ff', roughness: 0.45 }));
+    cap.position.y = 0.95; g.add(cap);
+    // turned so the letter reads upright from the camera behind the character
+    const label = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.42).rotateX(-Math.PI / 2).rotateY(Math.PI), new THREE.MeshBasicMaterial({
+      map: letterTexture('K', '#ffffff'), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2,
+    }));
+    label.position.y = 1.233; g.add(label);
+    addFace(g, 0.66, 0.392, 0.13);
+    return g;
+  } },
+  { id: 'jelly', label: '젤리', dot: '#8fe0c0', build() {
+    const g = new THREE.Group();
+    const profile = [[0, 0], [0.5, 0], [0.55, 0.06], [0.53, 0.5], [0.45, 0.84], [0.3, 1.0], [0.12, 1.07], [0, 1.08]]
+      .map(([x, y]) => new THREE.Vector2(x, y));
+    g.add(new THREE.Mesh(new THREE.LatheGeometry(profile, 40),
+      new THREE.MeshPhysicalMaterial({ color: '#8fe0c0', roughness: 0.1, clearcoat: 1, transparent: true, opacity: 0.82 })));
+    const fizz = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.6 });
+    for (const [x, y, z, r] of [[-0.18, 0.3, 0.1, 0.06], [0.2, 0.45, -0.1, 0.05], [0.05, 0.75, 0.15, 0.04], [-0.1, 0.6, -0.2, 0.05]]) {
+      const b = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), fizz);
+      b.position.set(x, y, z); g.add(b);
+    }
+    const cherry = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 12), new THREE.MeshPhysicalMaterial({ color: '#ff5a7a', roughness: 0.25, clearcoat: 1 }));
+    cherry.position.y = 1.16; g.add(cherry);
+    const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.16, 6), new THREE.MeshBasicMaterial({ color: '#3f7d4f' }));
+    stem.position.set(0.03, 1.3, 0); stem.rotation.z = -0.3; g.add(stem);
+    addFace(g, 0.62, 0.505);
+    return g;
+  } },
+  { id: 'cat', label: '냥냥', dot: '#b9a4ff', build() {
+    const g = new THREE.Group();
+    const fur = new THREE.MeshStandardMaterial({ color: '#cbb8ff', roughness: 0.6 });
+    const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.36, 0.6, 8, 20), fur);
+    torso.position.y = 0.66; g.add(torso);
+    for (const s of [-1, 1]) {
+      const ear = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.24, 16), fur);
+      ear.position.set(0.19 * s, 1.28, 0); ear.rotation.z = -0.35 * s; g.add(ear);
+    }
+    const tail = new THREE.Mesh(new THREE.TorusGeometry(0.26, 0.05, 8, 24, Math.PI * 1.2), fur);
+    tail.position.set(0, 0.55, -0.4); tail.rotation.y = Math.PI / 2; g.add(tail);
+    addFace(g, 1.02, 0.345);
+    const nose = new THREE.Mesh(new THREE.SphereGeometry(0.03, 10, 8), new THREE.MeshBasicMaterial({ color: '#ff7aa8' }));
+    nose.position.set(0, 0.95, 0.36); g.add(nose);
+    return g;
+  } },
+];
+const avatarVariants = new Map(CHARACTERS.map((ch) => {
+  const g = ch.build();
+  g.visible = false; avatarBody.add(g);
+  return [ch.id, g];
+}));
+let charId = 'wakppu';
+function setCharacter(id) {
+  charId = id;
+  for (const [key, g] of avatarVariants) g.visible = key === id;
+}
+const shadow = new THREE.Mesh(new THREE.CircleGeometry(0.42, 28).rotateX(-Math.PI / 2),
+  new THREE.MeshBasicMaterial({ color: '#3a2947', transparent: true, opacity: 0.3, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4 }));
+scene.add(shadow);
+
+/* ---------- Particles ---------- */
+const white = new THREE.Color('#ffffff');
+const shardGeo = new THREE.TetrahedronGeometry(0.09);
+const shards = Array.from({ length: 72 }, () => {
+  const m = new THREE.Mesh(shardGeo, new THREE.MeshStandardMaterial({ roughness: 0.4 }));
+  m.visible = false; scene.add(m);
+  return { m, v: new THREE.Vector3(), spin: new THREE.Vector3(), life: 0 };
+});
+const bubbleGeo = new THREE.SphereGeometry(0.05, 10, 8);
+const bubbleMat = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.8, depthWrite: false });
+const bubbles = Array.from({ length: 60 }, () => {
+  const m = new THREE.Mesh(bubbleGeo, bubbleMat);
+  m.visible = false; scene.add(m);
+  return { m, v: new THREE.Vector3(), life: 0, seed: 0 };
+});
+function spawnShards(p) {
+  let n = 16;
+  for (const s of shards) {
+    if (n <= 0) break;
+    if (s.life > 0) continue;
+    n--;
+    s.m.material.color.copy(p.mesh.material.color).lerp(white, rand(0, 0.45));
+    s.m.position.set(p.c.cx + rand(-0.45, 0.45), p.c.top - rand(0, 0.2), p.c.cz + rand(-0.45, 0.45));
+    const a = rand(0, Math.PI * 2), sp = rand(1.4, 3.2);
+    s.v.set(Math.cos(a) * sp, rand(2.4, 5), Math.sin(a) * sp);
+    s.spin.set(rand(-9, 9), rand(-9, 9), rand(-9, 9));
+    s.life = rand(0.6, 1.0); s.m.scale.setScalar(rand(0.7, 1.5)); s.m.visible = true;
+  }
+}
+function spawnBubble(p) {
+  const b = bubbles.find((item) => item.life <= 0);
+  if (!b) return;
+  b.m.position.set(p.c.cx + rand(-0.65, 0.65), p.c.top - rand(0.15, 0.6), p.c.cz + rand(-0.65, 0.65));
+  b.v.set(0, rand(0.5, 1.1), 0); b.life = rand(0.9, 1.5); b.seed = rand(0, 10);
+  b.m.scale.setScalar(rand(0.6, 1.3)); b.m.visible = true;
+}
+function updateParticles(dt, time) {
+  for (const s of shards) {
+    if (s.life <= 0) continue;
+    s.life -= dt; s.v.y -= 14 * dt;
+    s.m.position.addScaledVector(s.v, dt);
+    s.m.rotation.x += s.spin.x * dt; s.m.rotation.y += s.spin.y * dt; s.m.rotation.z += s.spin.z * dt;
+    if (s.life < 0.25) s.m.scale.multiplyScalar(0.9);
+    if (s.life <= 0) s.m.visible = false;
+  }
+  for (const b of bubbles) {
+    if (b.life <= 0) continue;
+    b.life -= dt;
+    b.m.position.y += b.v.y * dt;
+    b.m.position.x += Math.sin(time * 9 + b.seed) * 0.15 * dt;
+    if (b.life < 0.3) b.m.scale.multiplyScalar(0.93);
+    if (b.life <= 0) b.m.visible = false;
+  }
+}
+
+// the shell, pre-cut into curved flakes that fly off when a wax ball breaks
+const SHELL_R = 0.92, WAX_REGEN_SEC = 10;
+const shellPieces = [];
+for (let b = 0; b < 4; b++) {
+  for (let s = 0; s < 7; s++) {
+    const thetaStart = (b / 4) * Math.PI, thetaLength = Math.PI / 4;
+    const phiStart = (s / 7) * Math.PI * 2 + (b % 2) * 0.45, phiLength = (Math.PI * 2) / 7;
+    const g = new THREE.SphereGeometry(SHELL_R, 5, 3, phiStart, phiLength, thetaStart, thetaLength);
+    const tc = thetaStart + thetaLength / 2, pc = phiStart + phiLength / 2;
+    const dir = new THREE.Vector3(-Math.cos(pc) * Math.sin(tc), Math.cos(tc), Math.sin(pc) * Math.sin(tc));
+    g.translate(-dir.x * SHELL_R, -dir.y * SHELL_R, -dir.z * SHELL_R);
+    shellPieces.push({ g, dir });
+  }
+}
+const flakes = [];
+function burstShell(p) {
+  const centerY = p.bottomY + SHELL_R * p.sy;
+  for (const piece of shellPieces) {
+    const m = new THREE.Mesh(piece.g, p.mesh.material);
+    m.position.set(p.c.cx + piece.dir.x * SHELL_R, centerY + piece.dir.y * SHELL_R, p.c.cz + piece.dir.z * SHELL_R);
+    const v = piece.dir.clone().multiplyScalar(rand(1.2, 2.6));
+    v.y += piece.dir.y > 0 ? rand(1.4, 3.0) : rand(0, 0.8);
+    scene.add(m);
+    // cracks run from the top, where the foot lands, down to the bottom
+    flakes.push({ m, v, spin: new THREE.Vector3(rand(-6, 6), rand(-6, 6), rand(-6, 6)), life: rand(1.1, 1.6), delay: (1 - piece.dir.y) * 0.04 });
+  }
+}
+function updateFlakes(dt) {
+  for (let i = flakes.length - 1; i >= 0; i--) {
+    const f = flakes[i];
+    if (f.delay > 0) { f.delay -= dt; continue; }
+    f.life -= dt; f.v.y -= 12 * dt;
+    f.m.position.addScaledVector(f.v, dt);
+    f.m.rotation.x += f.spin.x * dt; f.m.rotation.y += f.spin.y * dt; f.m.rotation.z += f.spin.z * dt;
+    if (f.life < 0.35) f.m.scale.multiplyScalar(0.88);
+    if (f.life <= 0) { scene.remove(f.m); flakes.splice(i, 1); }
+  }
+}
+function restoreWax(p) {
+  p.cracked = false; p.target = 1; p.grow = 0;
+  p.mesh.visible = true; p.mesh.scale.setScalar(0.6);
+  p.topRest = 1.7; p.botRest = 0.32;
+  p.collapseAt = 0; p.collapsed = false; p.shrink = 0;
+  p.core.visible = true; p.core.scale.setScalar(1); p.c.off = false;
+}
+
+/* ---------- Game state ---------- */
+let started = false, cleared = false, restored = false, steps = 0, elapsed = 0, currentCp = 0, fizzClock = 0, toastTimer = 0, startTime = 0;
+// offset: the starting view sits outside the tower, a little behind the climb
+const cam = { yaw: 0, pitch: 0.42, dist: 8.5, curDist: 8.5, offset: -0.55, target: new THREE.Vector3(0, 7, 0) };
+const keys = new Set();
+const drag = { active: false, x: 0, y: 0, id: null };
+
+function showToast(text) {
+  const el = $('toast');
+  el.textContent = text; el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 1400);
+}
+function activateCheckpoint(p) {
+  if (p.active) return;
+  p.active = true; p.mesh.material.emissiveIntensity = 0.45;
+  if (p.opts.index > currentCp) currentCp = p.opts.index;
+  Sound.fire('chime'); showToast('체크포인트 저장');
+}
+function reachGoal() {
+  if (cleared) return;
+  cleared = true; keys.clear();
+  Sound.fire('fanfare');
+  $('clearTime').textContent = fmtTime(elapsed);
+  $('clearSteps').textContent = steps + '번';
+  setTimeout(() => { $('clear').hidden = false; $('againBtn').focus(); }, 700);
+}
+function onEnter(p) {
+  if (p.type === 'floor') return;
+  if (started) steps++;
+  if (p.type === 'key' || p.type === 'clicky') {
+    p.pressTarget = -0.12;
+    Sound.fire(p.type === 'key' ? 'thock' : 'clicky');
+  } else if (p.type === 'wax') {
+    p.target = 0.8;
+    if (!p.cracked) {
+      // the shell bursts and the player sinks a little onto the soft core
+      p.cracked = true; p.svy -= 3.4; p.regenAt = performance.now() / 1000 + WAX_REGEN_SEC;
+      if (diff.collapse) p.collapseAt = performance.now() / 1000 + diff.collapse;
+      p.mesh.visible = false; p.topRest = 1.56; p.botRest = 0.25;
+      Sound.fire('crunch'); burstShell(p); spawnShards(p);
+    } else {
+      p.svy -= 2.2; Sound.fire('squish');
+    }
+  } else if (p.type === 'soda') {
+    p.target = 0.9; p.svy -= 2.8;
+    Sound.fire('blub'); Sound.setFizz(true);
+  } else if (p.type === 'check') {
+    activateCheckpoint(p);
+  } else if (p.type === 'goal') {
+    reachGoal();
+  }
+}
+function onLeave(p) {
+  if (p.type === 'key' || p.type === 'clicky') {
+    p.pressTarget = 0;
+    Sound.fire(p.type === 'key' ? 'thockUp' : 'clickyUp');
+  } else if (p.type === 'wax') {
+    p.target = p.cracked ? 0.9 : 1;
+  } else if (p.type === 'soda') {
+    p.target = 1; p.svy += 1.6; Sound.setFizz(false);
+  }
+}
+function setGround(c) {
+  const plat = c ? c.plat : null;
+  if (plat === player.groundPlat) return;
+  const prev = player.groundPlat;
+  player.groundPlat = plat;
+  if (prev) onLeave(prev);
+  if (plat) onEnter(plat);
+}
+function respawn() {
+  const cp = checkpoints[currentCp];
+  setGround(null);
+  player.pos.set(cp.c.cx, cp.c.top + 0.02, cp.c.cz);
+  player.vel.set(0, 0, 0);
+  player.grounded = false; player.groundCollider = null; player.coyote = 0;
+  player.facing = Math.atan2(-Math.sin(cp.t), -Math.cos(cp.t));
+  cam.yaw = Math.atan2(player.pos.x, player.pos.z) + cam.offset;
+}
+function resetRun() {
+  for (const p of platforms) {
+    if (p.type === 'wax' && p.cracked) restoreWax(p);
+    if (p.type === 'check' && p.opts.index > 0) { p.active = false; p.mesh.material.emissiveIntensity = 0; }
+  }
+  currentCp = 0; cleared = false; steps = 0; elapsed = 0;
+  respawn();
+  $('clear').hidden = true;
+  canvas.focus();
+}
+
+/* ---------- Physics: a cylinder player against yaw-rotated boxes ---------- */
+function horizDist2(c, p) {
+  const dx = p.x - c.cx, dz = p.z - c.cz;
+  const lx = c.cos * dx - c.sin * dz, lz = c.sin * dx + c.cos * dz;
+  const ex = lx - clamp(lx, -c.hx, c.hx), ez = lz - clamp(lz, -c.hz, c.hz);
+  return ex * ex + ez * ez;
+}
+function collideHorizontal() {
+  const p = player.pos;
+  for (const c of colliders) {
+    if (c === player.groundCollider || c.off) continue;
+    if (p.y + PLAYER_H <= c.bottom + 0.001 || p.y >= c.top - 0.001) continue;
+    const dx = p.x - c.cx, dz = p.z - c.cz;
+    const lx = c.cos * dx - c.sin * dz, lz = c.sin * dx + c.cos * dz;
+    const ex = lx - clamp(lx, -c.hx, c.hx), ez = lz - clamp(lz, -c.hz, c.hz);
+    const d2 = ex * ex + ez * ez;
+    if (d2 >= PLAYER_R * PLAYER_R) continue;
+    const rise = c.top - p.y;
+    if (rise <= STEP_UP && (player.grounded || player.coyote > 0 || (player.vel.y <= 0 && rise <= 0.3))) {
+      // step up only once the centre is far enough over the ledge to stand there;
+      // stepping up earlier gets undone by the support check and retriggers every substep
+      if (d2 >= SUPPORT_R2) continue;
+      p.y = c.top; player.vel.y = Math.max(0, player.vel.y);
+      player.grounded = true; player.coyote = COYOTE; player.groundCollider = c;
+      setGround(c);
+      continue;
+    }
+    let pushX, pushZ;
+    if (d2 > 1e-9) {
+      const d = Math.sqrt(d2), pen = PLAYER_R - d;
+      pushX = (ex / d) * pen; pushZ = (ez / d) * pen;
+    } else {
+      const px = c.hx - Math.abs(lx) + PLAYER_R, pz = c.hz - Math.abs(lz) + PLAYER_R;
+      if (px < pz) { pushX = (lx >= 0 ? 1 : -1) * px; pushZ = 0; } else { pushX = 0; pushZ = (lz >= 0 ? 1 : -1) * pz; }
+    }
+    p.x += c.cos * pushX + c.sin * pushZ;
+    p.z += -c.sin * pushX + c.cos * pushZ;
+  }
+  const rr = Math.hypot(p.x, p.z), minR = PILLAR_R + PLAYER_R;
+  if (rr < minR && p.y < pillarH) { const k = minR / Math.max(rr, 1e-6); p.x *= k; p.z *= k; }
+}
+function collideVertical(prevY) {
+  const p = player.pos, v = player.vel;
+  let best = null, bestD = Infinity;
+  for (const c of colliders) {
+    if (c.off) continue;
+    const d2 = horizDist2(c, p);
+    if (d2 >= SUPPORT_R2) continue;
+    if (v.y <= 0) {
+      const tol = c === player.groundCollider ? 0.4 : 0.12;
+      // inclusive, so a player just stepped up onto exactly this top still counts as standing on it
+      if (prevY >= c.top - tol && p.y <= c.top && (d2 < bestD - 1e-6 || (Math.abs(d2 - bestD) <= 1e-6 && c.top > best.top))) {
+        best = c; bestD = d2;
+      }
+    } else if (prevY + PLAYER_H <= c.bottom + 0.05 && p.y + PLAYER_H > c.bottom) {
+      p.y = c.bottom - PLAYER_H; v.y = 0;
+    }
+  }
+  if (best) { p.y = best.top; v.y = 0; return best; }
+  if (v.y <= 0 && p.y <= 0 && prevY >= -0.3 && Math.hypot(p.x, p.z) < FLOOR_R) { p.y = 0; v.y = 0; return FLOOR; }
+  return null;
+}
+function physicsStep(dt) {
+  const p = player.pos, v = player.vel;
+  v.y = Math.max(v.y - GRAV * dt, -MAX_FALL);
+  p.x += v.x * dt; p.z += v.z * dt;
+  collideHorizontal();
+  const prevY = p.y, vyBefore = v.y;
+  p.y += v.y * dt;
+  const landed = collideVertical(prevY);
+  if (landed) {
+    if (!player.grounded && vyBefore < -7) {
+      player.sy = 0.76; player.svy = 0;
+      if (landed === FLOOR) Sound.fire('thud');
+    }
+    player.grounded = true; player.coyote = COYOTE; player.groundCollider = landed;
+    setGround(landed);
+  } else {
+    player.grounded = false; player.coyote -= dt; player.groundCollider = null;
+    setGround(null);
+  }
+}
+function controlStep(dt) {
+  if (player.jumpBuf > 0) player.jumpBuf -= dt;
+  if (player.jumpBuf > 0 && (player.grounded || player.coyote > 0)) {
+    player.vel.y = JUMP_V; player.jumpBuf = 0; player.coyote = 0;
+    player.grounded = false; player.groundCollider = null; setGround(null);
+    player.sy = 1.18; player.svy = 0;
+    Sound.fire('jump');
+  }
+  const ix = (keys.has('KeyD') || keys.has('ArrowRight') ? 1 : 0) - (keys.has('KeyA') || keys.has('ArrowLeft') ? 1 : 0);
+  const iz = (keys.has('KeyW') || keys.has('ArrowUp') ? 1 : 0) - (keys.has('KeyS') || keys.has('ArrowDown') ? 1 : 0);
+  let mx = 0, mz = 0;
+  if (ix || iz) {
+    // camera-relative: right = (cos, -sin), forward = (-sin, -cos)
+    const s = Math.sin(cam.yaw), c = Math.cos(cam.yaw);
+    mx = c * ix - s * iz; mz = -s * ix - c * iz;
+    const len = Math.hypot(mx, mz); mx /= len; mz /= len;
+  }
+  const accel = (player.grounded ? 44 : 20) * dt;
+  player.vel.x = approach(player.vel.x, mx * RUN, accel);
+  player.vel.z = approach(player.vel.z, mz * RUN, accel);
+  if (!cleared) elapsed += dt;
+}
+
+/* ---------- Per-frame visuals ---------- */
+function updatePlatforms(dt, time) {
+  for (const p of platforms) {
+    if (p.type === 'check' || p.type === 'pad' || p.type === 'goal') continue;
+    if (p.type === 'wax') {
+      // a broken ball grows its shell back once nobody is standing on it
+      if (p.cracked && time >= p.regenAt && player.groundPlat !== p) restoreWax(p);
+      // hard setting: the soft core gives way shortly after the shell breaks
+      if (p.cracked && !p.collapsed && p.collapseAt && time >= p.collapseAt) {
+        p.collapsed = true; p.shrink = 1; Sound.fire('crumble');
+      }
+      if (p.collapsed && p.shrink > 0) {
+        p.shrink = Math.max(0, p.shrink - dt / 0.25);
+        p.core.scale.setScalar(Math.max(0.001, p.shrink));
+        p.topRest = 1.56 * p.shrink; p.botRest = 0.25 * p.shrink;
+        if (p.shrink === 0) { p.core.visible = false; p.c.off = true; }
+      }
+      if (p.grow < 1) {
+        p.grow = Math.min(1, p.grow + dt / 0.35);
+        const x = p.grow - 1;
+        p.mesh.scale.setScalar(0.6 + 0.4 * (1 + 2.70158 * x * x * x + 1.70158 * x * x));
+      }
+    }
+    const k = 240, damping = p.type === 'soda' ? 8 : 15;
+    p.svy += (k * (p.target - p.sy) - damping * p.svy) * dt;
+    p.sy += p.svy * dt;
+    p.press += (p.pressTarget - p.press) * damp(30, dt);
+    const sx = 1 + (1 - p.sy) * 0.55;
+    p.body.scale.set(sx, p.sy, sx);
+    p.body.position.y = p.press;
+    // the key press is cosmetic only: if it moved the collider, a player standing across two keys
+    // would see the neighbour as a ledge, step onto it, and bounce between the two forever
+    p.c.top = p.bottomY + p.topRest * p.sy;
+    p.c.bottom = p.bottomY + p.botRest * p.sy;
+  }
+}
+function updateAvatar(dt, time) {
+  avatar.position.copy(player.pos);
+  if (player.groundPlat) avatar.position.y += player.groundPlat.press ?? 0; // sink with a pressed key
+  const speed = Math.hypot(player.vel.x, player.vel.z);
+  if (speed > 0.4) player.facing = lerpAngle(player.facing, Math.atan2(player.vel.x, player.vel.z), damp(14, dt));
+  avatar.rotation.y = player.facing;
+  player.svy += (260 * (1 - player.sy) - 15 * player.svy) * dt;
+  player.sy += player.svy * dt;
+  const sx = 1 + (1 - player.sy) * 0.5;
+  avatarBody.scale.set(sx, player.sy, sx);
+  avatarBody.position.y = player.grounded && speed > 0.6 ? Math.abs(Math.sin(time * 11)) * 0.06 : 0;
+
+  // contact shadow on whatever is directly underneath
+  let top = -Infinity, lift = 0.012;
+  for (const c of colliders) {
+    if (c.off || c.top > player.pos.y + 0.05 || c.top <= top) continue;
+    if (horizDist2(c, player.pos) > 0.0001) continue;
+    top = c.top;
+    lift = c.plat.type === 'wax' ? ((c.plat.cracked ? 1.6 : 1.84) - c.plat.topRest) * c.plat.sy + 0.012 : 0.012 + c.plat.press;
+  }
+  if (top === -Infinity && Math.hypot(player.pos.x, player.pos.z) < FLOOR_R && player.pos.y >= -0.05) { top = 0; lift = 0.012; }
+  shadow.visible = top > -Infinity;
+  if (shadow.visible) {
+    const gap = player.pos.y - top;
+    shadow.position.set(player.pos.x, top + lift, player.pos.z);
+    shadow.scale.setScalar(clamp(1 - gap * 0.07, 0.45, 1));
+    shadow.material.opacity = clamp(0.34 - gap * 0.025, 0.1, 0.34);
+  }
+}
+const tmpDir = new THREE.Vector3(), wantTarget = new THREE.Vector3(), wantPos = new THREE.Vector3(), ray = new THREE.Raycaster();
+function updateCamera(dt, time) {
+  if (!started) {
+    const a = time * 0.12;
+    wantTarget.set(0, goalTop * 0.45, 0);
+    cam.target.lerp(wantTarget, damp(3, dt));
+    camera.position.set(Math.sin(a) * 19, goalTop * 0.55 + Math.sin(time * 0.3) * 1.2, Math.cos(a) * 19);
+    camera.lookAt(cam.target);
+    return;
+  }
+  wantTarget.set(player.pos.x, player.pos.y + 1.15, player.pos.z);
+  cam.target.lerp(wantTarget, damp(12, dt));
+  const cp = Math.cos(cam.pitch);
+  tmpDir.set(Math.sin(cam.yaw) * cp, Math.sin(cam.pitch), Math.cos(cam.yaw) * cp);
+  ray.set(cam.target, tmpDir); ray.far = cam.dist;
+  const hit = ray.intersectObjects(occluders, false)[0];
+  const want = hit ? Math.max(1.4, hit.distance - 0.3) : cam.dist;
+  cam.curDist = want < cam.curDist ? want : cam.curDist + (want - cam.curDist) * damp(3, dt);
+  wantPos.copy(cam.target).addScaledVector(tmpDir, cam.curDist);
+  const settle = clamp((time - startTime) / 1.2, 0, 1);
+  camera.position.lerp(wantPos, damp(3 + 30 * settle, dt));
+  camera.lookAt(cam.target);
+}
+const hud = { height: $('height'), bar: $('bar'), steps: $('steps'), time: $('time') };
+function updateHud() {
+  hud.height.textContent = Math.max(0, player.pos.y).toFixed(1);
+  hud.bar.style.transform = `scaleX(${clamp(player.pos.y / goalTop, 0, 1)})`;
+  hud.steps.textContent = steps;
+  hud.time.textContent = fmtTime(elapsed);
+}
+
+/* ---------- Loop ---------- */
+let last = 0;
+function frame(nowMs) {
+  const dt = Math.min(0.05, Math.max(0, (nowMs - last) / 1000));
+  last = nowMs;
+  const time = nowMs / 1000;
+  if (started) controlStep(dt);
+  // ride a platform as it squashes or presses down
+  if (player.grounded && player.groundCollider && Math.abs(player.groundCollider.top - player.pos.y) < 0.4) player.pos.y = player.groundCollider.top;
+  for (let i = 0; i < 4; i++) physicsStep(dt / 4);
+  if (player.pos.y < -12) respawn();
+  if (player.groundPlat && player.groundPlat.type === 'soda') {
+    fizzClock -= dt;
+    while (fizzClock <= 0) { fizzClock += rand(0.03, 0.07); Sound.fire('fizzTick'); spawnBubble(player.groundPlat); }
+  } else {
+    fizzClock = 0;
+  }
+  updatePlatforms(dt, time);
+  updateAvatar(dt, time);
+  updateParticles(dt, time);
+  updateFlakes(dt);
+  updateCamera(dt, time);
+  updateHud();
+  if (trophy) {
+    trophy.rotation.y += dt * 0.8;
+    star.position.y = 1.55 + Math.sin(time * 2) * 0.08; star.rotation.y += dt * 2;
+  }
+  clouds.rotation.y += dt * 0.01;
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+/* ---------- Input ---------- */
+const GAME_KEYS = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space']);
+function startGame() {
+  if (started) return;
+  Sound.init();
+  Sound.setVolume($('volume').value / 100);
+  if (restored) restored = false; else resetRun();
+  started = true; startTime = performance.now() / 1000;
+  $('start').hidden = true;
+  cam.curDist = cam.dist;
+  canvas.focus();
+}
+// back to the start card, where the character and difficulty can change
+function openMenu() {
+  started = false; keys.clear(); Sound.setFizz(false);
+  $('clear').hidden = true; $('start').hidden = false;
+  $('startBtn').focus();
+}
+function toggleMute() { $('muteLabel').textContent = Sound.toggleMute() ? '소리 켜기' : '소리 끄기'; }
+
+const store = (k, v) => { try { localStorage.setItem('wakppu.' + k, v); } catch (err) { /* storage unavailable */ } };
+const stored = (k) => { try { return localStorage.getItem('wakppu.' + k); } catch (err) { return null; } };
+function chip(id, value, label, dot, onPick) {
+  const b = document.createElement('button');
+  b.type = 'button'; b.id = id; b.className = 'chip'; b.dataset.id = value; b.setAttribute('aria-pressed', 'false');
+  if (dot) {
+    const d = document.createElement('span');
+    d.className = 'dot'; d.style.setProperty('--dot', dot); b.append(d);
+  }
+  b.append(label);
+  b.addEventListener('click', onPick);
+  return b;
+}
+function chooseCharacter(id) {
+  setCharacter(id); store('char', id);
+  for (const b of $('charChips').children) b.setAttribute('aria-pressed', String(b.dataset.id === id));
+}
+function chooseDifficulty(key) {
+  if (key !== diffKey) { buildLevel(key); respawn(); }
+  store('diff', key);
+  for (const b of $('diffChips').children) b.setAttribute('aria-pressed', String(b.dataset.id === key));
+  $('diffNote').textContent = DIFFICULTY[key].note;
+}
+for (const ch of CHARACTERS) $('charChips').append(chip(`char-${ch.id}`, ch.id, ch.label, ch.dot, () => chooseCharacter(ch.id)));
+for (const [key, d] of Object.entries(DIFFICULTY)) $('diffChips').append(chip(`diff-${key}`, key, d.label, null, () => chooseDifficulty(key)));
+
+window.addEventListener('keydown', (e) => {
+  if (e.target && e.target.tagName === 'INPUT') return;
+  if (!started) {
+    // a focused button (a chip, or the start button itself) handles Enter and Space on its own
+    if ((e.code === 'Enter' || e.code === 'Space') && !(e.target instanceof HTMLButtonElement)) { e.preventDefault(); startGame(); }
+    return;
+  }
+  if (e.code === 'Escape') { openMenu(); return; }
+  if (!$('clear').hidden) return;
+  if (GAME_KEYS.has(e.code)) e.preventDefault();
+  if (e.repeat) return;
+  keys.add(e.code);
+  if (e.code === 'Space') player.jumpBuf = 0.14;
+  else if (e.code === 'KeyR') respawn();
+  else if (e.code === 'KeyM') toggleMute();
+});
+window.addEventListener('keyup', (e) => keys.delete(e.code));
+window.addEventListener('blur', () => keys.clear());
+
+canvas.addEventListener('pointerdown', (e) => {
+  drag.active = true; drag.x = e.clientX; drag.y = e.clientY; drag.id = e.pointerId;
+  canvas.setPointerCapture(e.pointerId); canvas.focus();
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (!drag.active || e.pointerId !== drag.id) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  drag.x = e.clientX; drag.y = e.clientY;
+  cam.yaw -= dx * 0.006;
+  cam.pitch = clamp(cam.pitch + dy * 0.004, 0.08, 1.15);
+});
+const endDrag = (e) => { if (e.pointerId === drag.id) drag.active = false; };
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+canvas.addEventListener('wheel', (e) => { e.preventDefault(); cam.dist = clamp(cam.dist + e.deltaY * 0.01, 4, 15); }, { passive: false });
+
+$('startBtn').addEventListener('click', startGame);
+$('mute').addEventListener('click', (e) => { toggleMute(); e.currentTarget.blur(); canvas.focus(); });
+$('respawnBtn').addEventListener('click', (e) => { respawn(); e.currentTarget.blur(); canvas.focus(); });
+$('volume').addEventListener('input', (e) => Sound.setVolume(e.target.value / 100));
+$('volume').addEventListener('change', (e) => { e.target.blur(); canvas.focus(); });
+$('againBtn').addEventListener('click', resetRun);
+$('stayBtn').addEventListener('click', () => { $('clear').hidden = true; canvas.focus(); });
+$('menuBtn').addEventListener('click', (e) => { e.currentTarget.blur(); openMenu(); });
+$('menuBtn2').addEventListener('click', openMenu);
+
+/* ---------- Boot ---------- */
+const hot = window.claude?.hot;
+try {
+  hot?.snapshot?.(() => ({ diff: diffKey, char: charId, currentCp, steps, elapsed, cam: { pitch: cam.pitch, dist: cam.dist } }));
+} catch (err) { /* viewer hook unavailable */ }
+function boot(data = {}) {
+  const pick = (value, allowed, fallback) => (allowed.includes(value) ? value : fallback);
+  chooseDifficulty(pick(data.diff ?? stored('diff'), Object.keys(DIFFICULTY), 'easy'));
+  chooseCharacter(pick(data.char ?? stored('char'), CHARACTERS.map((c) => c.id), 'wakppu'));
+  if (data.diff === diffKey && Number.isInteger(data.currentCp) && checkpoints[data.currentCp]) {
+    for (let i = 1; i <= data.currentCp; i++) { checkpoints[i].active = true; checkpoints[i].mesh.material.emissiveIntensity = 0.45; }
+    currentCp = data.currentCp; steps = data.steps | 0; elapsed = Number(data.elapsed) || 0; restored = true;
+  }
+  if (data.cam) {
+    cam.pitch = Number(data.cam.pitch) || cam.pitch;
+    cam.dist = Number(data.cam.dist) || cam.dist;
+  }
+  respawn();
+  requestAnimationFrame((t) => { last = t; frame(t); });
+}
+if (hot?.ready) hot.ready(boot); else boot(hot?.data ?? {});
+</script>
+
+</body></html>

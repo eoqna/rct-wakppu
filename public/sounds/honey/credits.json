@@ -1,0 +1,119 @@
+{
+  "pack": "honey",
+  "cues": {
+    "comb-crunch": {
+      "files": [
+        "comb-crunch-01.wav",
+        "comb-crunch-02.wav",
+        "comb-crunch-03.wav",
+        "comb-crunch-04.wav",
+        "comb-crunch-05.wav",
+        "comb-crunch-06.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 414310,
+          "title": "Graham Cracker Steps",
+          "author": "newagesoup",
+          "url": "https://freesound.org/people/newagesoup/sounds/414310/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "'Graham Cracker Steps': close-field stereo recording (Zoom H4n + AKG Perception) of graham crackers crushed one at a time, described by the author as usable as footsteps. Nine isolated crumbles about 1.1 s apart; six used (0.19-0.30 s), chosen for similar level. Dry, crisp and crumbly, no mouth sounds, noise floor about -68 dBFS, no clipping. Substitute texture: a cracker crumble stands in for brittle honeycomb candy (no CC0 honeycomb or dalgona recording turned up; eating recordings were all mouth noise). The raw crumble is bright (centroid 3.3-6.0 kHz, 25-50% of the energy above 5 kHz), so a -3 dB high shelf above 6 kHz was applied; centroid is now 2.8-4.9 kHz. Listen for first: whether it still sounds too sizzly; if so a steeper shelf or a low-pass can be applied to these files.",
+      "process": "Decoded each source's Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le), mono mix (L+R)/2 for stereo. Slices as '<file>: #<source id> <cut start>-<cut end> seconds in the decoded preview (gain)': 01: #414310 0.430-0.619 s (+11.3 dB); 02: #414310 1.319-1.542 s (+12.1 dB); 03: #414310 3.464-3.727 s (+9.0 dB); 04: #414310 4.798-5.084 s (+6.5 dB); 05: #414310 7.324-7.628 s (+10.4 dB); 06: #414310 10.126-10.391 s (+10.6 dB). Cut start = 3.0 ms before the first 1 ms peak >= 25.0% of the event peak; cut end = event end + 30 ms; 2.5 ms cosine fade-in, 50 ms cosine fade-out, peak normalized to 0.85, 16-bit PCM at the source rate; 2nd-order high-pass at 60 Hz before cutting; high-shelf -3.0 dB above 6000 Hz before cutting."
+    },
+    "honey-stick": {
+      "files": [
+        "honey-stick-01.wav",
+        "honey-stick-02.wav",
+        "honey-stick-03.wav",
+        "honey-stick-04.wav",
+        "honey-stick-05.wav",
+        "honey-stick-06.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 431541,
+          "title": "Sticky Footsteps + door opening with beeping sound.",
+          "author": "SteeLManure",
+          "url": "https://freesound.org/people/SteeLManure/sounds/431541/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "'Sticky Footsteps': the author walks in shoes on a very sticky floor; each step is a heel strike followed by the sticky 'tack' of the sole peeling off, which is the foot-unsticking sound wanted here. Six single steps (0.12-0.19 s) from the first 17 s, before the door and beep at the end of the file. Centroid 1.6-3.4 kHz. Weakest recording technically: noise floor about -53 dBFS (the limit is -50), so slices carry +10 to +15 dB of gain and the hiss floor is audible in the tails. Substitute texture: sticky shoe-sole peel instead of honey. No better CC0 'sticky peel' was found: tape peels and rips were 5-7 kHz and clipped, plunger and suction pops were 300 Hz thumps or tiny ticks, and a second sticky-floor recording was too noisy (-41 dBFS).",
+      "process": "Decoded each source's Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le), mono mix (L+R)/2 for stereo. Slices as '<file>: #<source id> <cut start>-<cut end> seconds in the decoded preview (gain)': 01: #431541 1.774-1.931 s (+13.8 dB); 02: #431541 3.126-3.318 s (+13.8 dB); 03: #431541 3.807-3.931 s (+12.7 dB); 04: #431541 7.723-7.892 s (+9.9 dB); 05: #431541 10.590-10.766 s (+14.2 dB); 06: #431541 16.477-16.662 s (+14.8 dB). Cut start = 3.0 ms before the first 1 ms peak >= 25.0% of the event peak; cut end = event end + 40 ms; 2.5 ms cosine fade-in, 40 ms cosine fade-out, peak normalized to 0.85, 16-bit PCM at the source rate; 2nd-order high-pass at 60 Hz before cutting."
+    },
+    "drop-squish": {
+      "files": [
+        "drop-squish-01.wav",
+        "drop-squish-02.wav",
+        "drop-squish-03.wav",
+        "drop-squish-04.wav",
+        "drop-squish-05.wav",
+        "drop-squish-06.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 703678,
+          "title": "Squishy Foot Steps.wav",
+          "author": "newagesoup",
+          "url": "https://freesound.org/people/newagesoup/sounds/703678/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "'Squishy Foot Steps': squeezes of a squishy fidget toy recorded as jelly-creature footsteps (44.1 kHz/24-bit stereo, noise floor about -74 dBFS, no clipping). Seven squeezes in 2.5 s; six used, and the seventh, a dense one 4-5 dB louder than the rest, was dropped. Slices are 0.07-0.15 s soft wet squeezes with fine popping texture (centroid 1.8-4.4 kHz), no gore and no voice. It reads more as a squeeze than a clean soft 'tok'. Only six clean events exist, so this is the minimum count, and the shortest slice (0.069 s) is close to the 0.06 s floor.",
+      "process": "Decoded each source's Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le), mono mix (L+R)/2 for stereo. Slices as '<file>: #<source id> <cut start>-<cut end> seconds in the decoded preview (gain)': 01: #703678 0.157-0.309 s (-0.6 dB); 02: #703678 0.839-0.988 s (+0.9 dB); 03: #703678 1.049-1.167 s (+6.7 dB); 04: #703678 1.333-1.472 s (+1.6 dB); 05: #703678 1.592-1.661 s (+9.8 dB); 06: #703678 2.133-2.265 s (+4.9 dB). Cut start = 3.0 ms before the first 1 ms peak >= 25.0% of the event peak; cut end = event end + 25 ms; 2.5 ms cosine fade-in, 40 ms cosine fade-out, peak normalized to 0.85, 16-bit PCM at the source rate; 2nd-order high-pass at 60 Hz before cutting."
+    },
+    "wood-tap": {
+      "files": [
+        "wood-tap-01.wav",
+        "wood-tap-02.wav",
+        "wood-tap-03.wav",
+        "wood-tap-04.wav",
+        "wood-tap-05.wav",
+        "wood-tap-06.wav",
+        "wood-tap-07.wav",
+        "wood-tap-08.wav",
+        "wood-tap-09.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 319217,
+          "title": "Sticks Hitting sticks.wav",
+          "author": "worthahep88",
+          "url": "https://freesound.org/people/worthahep88/sounds/319217/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "'Sticks Hitting sticks': wooden sticks knocked together ('dull wood sounds'), 48 kHz/16-bit stereo, noise floor about -69 dBFS, no clipping. Nine single knocks of 0.07-0.11 s with a woody resonance between 0.74 and 1.65 kHz and a fast decay, and almost nothing above 5 kHz. Chosen over woodblock and claves recordings, which are almost pure tones at 2.3-2.6 kHz (over 93% of the energy in the 2-5 kHz band) and therefore a piercing risk, and over finger and pencil taps, which were clicky and noisy. The resonance pitch differs a little between slices, so random picks will vary slightly in pitch; that reads like different taps on a stick.",
+      "process": "Decoded each source's Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le), mono mix (L+R)/2 for stereo. Slices as '<file>: #<source id> <cut start>-<cut end> seconds in the decoded preview (gain)': 01: #319217 0.442-0.515 s (+7.4 dB); 02: #319217 2.139-2.215 s (+5.3 dB); 03: #319217 5.442-5.540 s (+6.0 dB); 04: #319217 7.088-7.175 s (+14.8 dB); 05: #319217 8.360-8.450 s (+6.7 dB); 06: #319217 10.341-10.435 s (+7.9 dB); 07: #319217 13.526-13.620 s (+5.2 dB); 08: #319217 15.443-15.550 s (+4.9 dB); 09: #319217 20.969-21.075 s (+5.5 dB). Cut start = 3.0 ms before the first 1 ms peak >= 25.0% of the event peak; cut end = event end + 40 ms; 2.5 ms cosine fade-in, 30 ms cosine fade-out, peak normalized to 0.85, 16-bit PCM at the source rate; 2nd-order high-pass at 60 Hz before cutting."
+    },
+    "honey-loop": {
+      "files": [
+        "honey-loop-01.wav"
+      ],
+      "loop": true,
+      "sources": [
+        {
+          "id": 436905,
+          "title": "gunk bubbling in cave.wav",
+          "author": "rolle Andersson",
+          "url": "https://freesound.org/people/rolle%20Andersson/sounds/436905/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "'gunk bubbling in cave': per the description a small fountain pitched down with reverb added (Zoom H4n Pro XY, 44.1 kHz/16-bit stereo, L/R correlation 0.40, so the stereo image is kept). Slow, soft, thick bubbling and gloops with a warm spectrum: centroid about 0.75 kHz and essentially nothing above 3 kHz. It is the closest 'slow viscous drip' texture found; there is no CC0 honey or syrup drip recording of usable quality (thick-liquid, oil-pour and mud recordings were glugging, bassy under 500 Hz, or noisy). The 3.95 s loop (52.15-56.25 s of the file, the last 150 ms being the crossfade tail) has a calm seam (level around the join matches the loop average within 1 dB); level swings by about 7 dB between 250 ms steps and the loudest 50 ms is 11 dB above the median, which is the bigger gloops of the bubbling itself. Substitute texture: pitched-down water, not real honey. Mostly below 2 kHz, so it will be quiet on laptop speakers; raise its playback gain in the game rather than its normalization.",
+      "process": "Decoded the Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le). Took #436905 52.150-56.250 s (+1.5 dB) (seconds in the decoded preview; the last 150 ms are the crossfade tail), blended that 150 ms tail into the first 150 ms with an equal-power (sin/cos) crossfade so the file loops seamlessly, peak normalized to 0.70, 16-bit PCM at the source rate; 2nd-order high-pass at 40 Hz."
+    }
+  },
+  "missing": []
+}

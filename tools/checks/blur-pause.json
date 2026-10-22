@@ -1,0 +1,73 @@
+[
+ {
+  "do": "waitFor",
+  "expr": "!!window.__wakppu",
+  "ms": 20000
+ },
+ {
+  "do": "wait",
+  "ms": 600
+ },
+ {
+  "do": "press",
+  "code": "Enter"
+ },
+ {
+  "do": "wait",
+  "ms": 1500
+ },
+ {
+  "do": "eval",
+  "expr": "(() => { const L = window.__wakppu.layout(); window.__soda = L.platforms.findIndex(p => p.skinId === 'sodaJelly'); return window.__wakppu.teleport(window.__soda) })()"
+ },
+ {
+  "do": "wait",
+  "ms": 800
+ },
+ {
+  "do": "expect",
+  "name": "standing on soda jelly: one loop",
+  "expr": "window.__wakppu.info().loops",
+  "equals": 1
+ },
+ {
+  "do": "eval",
+  "expr": "window.dispatchEvent(new Event('blur')); window.__t0 = window.__wakppu.info().elapsed; true"
+ },
+ {
+  "do": "wait",
+  "ms": 1000
+ },
+ {
+  "do": "expect",
+  "name": "window blurred: clock stopped",
+  "expr": "window.__wakppu.info().elapsed === window.__t0",
+  "equals": true
+ },
+ {
+  "do": "expect",
+  "name": "window blurred: loop stopped",
+  "expr": "window.__wakppu.info().loops",
+  "equals": 0
+ },
+ {
+  "do": "eval",
+  "expr": "window.dispatchEvent(new Event('focus')); true"
+ },
+ {
+  "do": "wait",
+  "ms": 800
+ },
+ {
+  "do": "expect",
+  "name": "focus back: clock runs",
+  "expr": "window.__wakppu.info().elapsed > window.__t0",
+  "equals": true
+ },
+ {
+  "do": "expect",
+  "name": "focus back: loop plays again",
+  "expr": "window.__wakppu.info().loops",
+  "equals": 1
+ }
+]

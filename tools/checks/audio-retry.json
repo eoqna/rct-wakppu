@@ -1,0 +1,53 @@
+[
+ {
+  "do": "waitFor",
+  "expr": "!!window.__wakppu",
+  "ms": 20000
+ },
+ {
+  "do": "wait",
+  "ms": 600
+ },
+ {
+  "do": "press",
+  "code": "Enter"
+ },
+ {
+  "do": "wait",
+  "ms": 1500
+ },
+ {
+  "do": "expect",
+  "name": "audio running after start",
+  "expr": "window.__wakppu.info().audio",
+  "equals": "running"
+ },
+ {
+  "do": "eval",
+  "expr": "window.__wakppu.game.audio.ctx.suspend().then(() => true)"
+ },
+ {
+  "do": "wait",
+  "ms": 200
+ },
+ {
+  "do": "expect",
+  "name": "audio suspended by force",
+  "expr": "window.__wakppu.info().audio",
+  "equals": "suspended"
+ },
+ {
+  "do": "press",
+  "code": "KeyD"
+ },
+ {
+  "do": "wait",
+  "ms": 300
+ },
+ {
+  "do": "expect",
+  "name": "the next key press brings audio back",
+  "expr": "window.__wakppu.info().audio",
+  "equals": "running"
+ }
+]

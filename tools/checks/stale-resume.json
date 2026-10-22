@@ -1,0 +1,43 @@
+[
+ {
+  "do": "waitFor",
+  "expr": "!!window.__wakppu",
+  "ms": 20000
+ },
+ {
+  "do": "eval",
+  "expr": "localStorage.setItem('wakppu.progress.rainbow.easy', JSON.stringify({ checkpoint: 99, elapsed: 754, steps: 300, savedAt: 1 })); localStorage.setItem('wakppu.prefs', JSON.stringify({ tower: 'rainbow', character: 'wakppu', difficulty: 'easy', volume: 0.7, muted: false })); true"
+ },
+ {
+  "do": "reload"
+ },
+ {
+  "do": "waitFor",
+  "expr": "!!window.__wakppu",
+  "ms": 20000
+ },
+ {
+  "do": "wait",
+  "ms": 800
+ },
+ {
+  "do": "expect",
+  "name": "a save pointing at a missing checkpoint is not offered",
+  "expr": "window.__wakppu.game.getState().progress['rainbow.easy'] ?? null",
+  "equals": null
+ },
+ {
+  "do": "expect",
+  "name": "only the start button shows",
+  "expr": "[...document.querySelectorAll('.keycap.big')].map(b => b.textContent)",
+  "equals": [
+   "시작하기"
+  ]
+ },
+ {
+  "do": "expect",
+  "name": "the stale save is removed",
+  "expr": "localStorage.getItem('wakppu.progress.rainbow.easy')",
+  "equals": null
+ }
+]

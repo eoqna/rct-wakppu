@@ -1,0 +1,90 @@
+{
+  "pack": "keyboard",
+  "cues": {
+    "brown-press": {
+      "files": ["brown-press-01.wav", "brown-press-02.wav", "brown-press-03.wav", "brown-press-04.wav", "brown-press-05.wav", "brown-press-06.wav", "brown-press-07.wav", "brown-press-08.wav", "brown-press-09.wav"],
+      "loop": false,
+      "sources": [
+        { "id": 766625, "title": "Keyboard_Tactile_1", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766625/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766626, "title": "Keyboard_Tactile_10", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766626/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766627, "title": "Keyboard_Tactile_11", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766627/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766628, "title": "Keyboard_Tactile_12", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766628/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766631, "title": "Keyboard_Tactile_15", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766631/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766632, "title": "Keyboard_Tactile_2", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766632/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766633, "title": "Keyboard_Tactile_3", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766633/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766637, "title": "Keyboard_Tactile_6", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766637/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766638, "title": "Keyboard_Tactile_7", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766638/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }
+      ],
+      "notes": "Single taps on a tactile mechanical keyboard: the author describes each clip as 'A single key press on a tactile mechanical keyboard' (switch model not stated; treat it as Cherry-MX-Brown-like). Each clip holds one press (tactile bump plus bottom-out thud, 20-60 ms) and, 80-140 ms later, the release tick, so strokes are already isolated and press and release can be cut cleanly. Round and mid-heavy: energy mostly 0.5-5 kHz, spectral centroid 1.8-3.2 kHz, under 9 % above 5 kHz (the blue pack has a 5.4-7.0 kHz centroid and 50-85 % above 5 kHz). Left out: Tactile_4/5/8/13 (second event louder than the first, so press and release could not be told apart) and Tactile_9/14 (bright, 16-18 % in 5-10 kHz). Source noise in the gaps is about -52..-58 dBFS (preview of an Ogg original); slices are short and faded.",
+      "process": "Decode the Freesound HQ preview with ffmpeg (-i <id>-hq.mp3 -c:a pcm_s16le, native sample rate); times below are seconds from the start of that decoded file. Mono = L/R average; causal 4th-order Butterworth high-pass at 120 Hz (removes sub-bass rumble). Press = bump and thud up to where the 3 ms RMS envelope has stayed 30 dB under its peak for 18 ms, plus a 25 ms tail, never closer than 8 ms to the release. Every slice: starts 3.5 ms before its transient, 2.5 ms linear fade-in, cos^2 fade-out, normalised to peak 0.85, 16-bit mono. Press fade-out 35 ms. Slices (source clip id @ first sample, length, gain): 01: 766625 @0.0282 s, 69 ms, +5.9 dB; 02: 766626 @0.0107 s, 69 ms, +7.6 dB; 03: 766627 @0.0179 s, 65 ms, +7.8 dB; 04: 766628 @0.0042 s, 74 ms, +9.1 dB; 05: 766631 @0.0137 s, 71 ms, -0.9 dB; 06: 766632 @0.0224 s, 84 ms, +14.1 dB; 07: 766633 @0.0309 s, 73 ms, +14.4 dB; 08: 766637 @0.0128 s, 78 ms, +11.7 dB; 09: 766638 @0.0139 s, 69 ms, +7.7 dB"
+    },
+    "brown-release": {
+      "files": ["brown-release-01.wav", "brown-release-02.wav", "brown-release-03.wav", "brown-release-04.wav", "brown-release-05.wav"],
+      "loop": false,
+      "sources": [
+        { "id": 766628, "title": "Keyboard_Tactile_12", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766628/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766631, "title": "Keyboard_Tactile_15", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766631/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766633, "title": "Keyboard_Tactile_3", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766633/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766637, "title": "Keyboard_Tactile_6", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766637/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" },
+        { "id": 766638, "title": "Keyboard_Tactile_7", "author": "StavSounds", "url": "https://freesound.org/people/StavSounds/sounds/766638/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }
+      ],
+      "notes": "Upstroke ticks of the same taps (second event of each clip). Chosen for low brightness (10-12 % in 5-10 kHz) and a source peak above -21 dBFS; Tactile_1/2/10/11 releases were brighter (19-44 % in 5-10 kHz) and are not used.",
+      "process": "Decode the Freesound HQ preview with ffmpeg (-i <id>-hq.mp3 -c:a pcm_s16le, native sample rate); times below are seconds from the start of that decoded file. Same chain as brown-press (mono, 4th-order high-pass 120 Hz). Release = from 3.5 ms before the tick to the end of its decay plus an 18 ms tail (40-60 ms in all). Every slice: starts 3.5 ms before its transient, 2.5 ms linear fade-in, cos^2 fade-out, normalised to peak 0.85, 16-bit mono. Fade-out 25 ms. Slices: 01: 766628 @0.0925 s, 50 ms, +17.0 dB; 02: 766631 @0.1027 s, 57 ms, +11.3 dB; 03: 766633 @0.1524 s, 60 ms, +14.7 dB; 04: 766637 @0.1256 s, 47 ms, +13.7 dB; 05: 766638 @0.1566 s, 47 ms, +18.9 dB"
+    },
+    "red-press": {
+      "files": ["red-press-01.wav", "red-press-02.wav", "red-press-03.wav", "red-press-04.wav", "red-press-05.wav", "red-press-06.wav", "red-press-07.wav", "red-press-08.wav", "red-press-09.wav", "red-press-10.wav"],
+      "loop": false,
+      "sources": [
+        { "id": 789628, "title": "Keychron k10 A to + individual keys", "author": "Sadiquecat", "url": "https://freesound.org/people/Sadiquecat/sounds/789628/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }
+      ],
+      "notes": "Keychron K10 (full size, AZERTY) with linear switches, keys pressed one at a time from 'A' to '+', Zoom H2n XY; 18 isolated strokes with 0.55-1.45 s of near silence between them (noise floor about -68 dBFS, no clipping). Every stroke is a press and, 65-110 ms later, a release. Linear: one transient with a short soft ring, no tactile bump, so it differs from the brown clips mainly by structure (brown = two-part bump + thud) and from blue by having almost no 5-10 kHz click (after filtering, attack energy above 4 kHz is about 1 %, against 85 % for blue). The raw recording carries a strong desk/case thump below 160 Hz (more than 90 % of the energy), so it is filtered steeply; faint steady tones at 7.33 kHz and 14.66 kHz in the source are notched, and a low-pass plus a broad notch tame the keyboard's 7.8-9.6 kHz ring so the ticks stay soft (under 2 % of the energy above 5 kHz). 10 of the 18 strokes were chosen by a roundness score (low 5-10 kHz share, mid-heavy), not by ear.",
+      "process": "Decode the Freesound HQ preview with ffmpeg (-i <id>-hq.mp3 -c:a pcm_s16le, native sample rate); times below are seconds from the start of that decoded file. Mono = L/R average (stereo, 48 kHz); causal 4th-order Butterworth high-pass at 150 Hz; narrow notches (Q 40) at 7330 Hz and 14660 Hz; broad notch (Q 3) at 8600 Hz; 4th-order low-pass at 7.5 kHz. Press = from 3.5 ms before the transient to 6 ms before the release (at most 110 ms). Every slice: starts 3.5 ms before its transient, 2.5 ms linear fade-in, cos^2 fade-out, normalised to peak 0.85, 16-bit mono. Fade-out 30 ms. Slices (first sample, length, gain): 01 @4.0037 s, 65 ms, +16.2 dB; 02 @9.7410 s, 110 ms, +13.3 dB; 03 @15.6705 s, 76 ms, +13.6 dB; 04 @0.2487 s, 75 ms, +16.3 dB; 05 @2.0635 s, 68 ms, +10.4 dB; 06 @13.4743 s, 68 ms, +8.6 dB; 07 @3.0095 s, 70 ms, +10.2 dB; 08 @14.7685 s, 84 ms, +14.6 dB; 09 @11.9293 s, 81 ms, +10.6 dB; 10 @16.3342 s, 79 ms, +10.3 dB"
+    },
+    "red-release": {
+      "files": ["red-release-01.wav", "red-release-02.wav", "red-release-03.wav", "red-release-04.wav", "red-release-05.wav", "red-release-06.wav"],
+      "loop": false,
+      "sources": [
+        { "id": 789628, "title": "Keychron k10 A to + individual keys", "author": "Sadiquecat", "url": "https://freesound.org/people/Sadiquecat/sounds/789628/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }
+      ],
+      "notes": "Upstroke ticks of the same K10 strokes: short and soft (about 50-60 ms), chosen for a source peak above -20 dBFS (less noise gain) and a soft, low-brightness tick.",
+      "process": "Decode the Freesound HQ preview with ffmpeg (-i <id>-hq.mp3 -c:a pcm_s16le, native sample rate); times below are seconds from the start of that decoded file. Same chain as red-press (4th-order high-pass 150 Hz, notches 7330/14660 Hz, broad notch 8600 Hz, low-pass 7.5 kHz). Release = from 3.5 ms before the tick to the end of its decay plus 15 ms. Every slice: starts 3.5 ms before its transient, 2.5 ms linear fade-in, cos^2 fade-out, normalised to peak 0.85, 16-bit mono. Fade-out 25 ms. Slices: 01 @13.5452 s, 58 ms, +19.4 dB; 02 @0.3262 s, 62 ms, +22.0 dB; 03 @1.2468 s, 59 ms, +19.2 dB; 04 @12.0129 s, 48 ms, +19.0 dB; 05 @2.1335 s, 56 ms, +15.0 dB; 06 @5.0255 s, 58 ms, +19.7 dB"
+    },
+    "space-press": {
+      "files": ["space-press-01.wav", "space-press-02.wav", "space-press-03.wav", "space-press-04.wav"],
+      "loop": false,
+      "sources": [
+        { "id": 331347, "title": "Space bar hits", "author": "diniunicorn", "url": "https://freesound.org/people/diniunicorn/sounds/331347/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }
+      ],
+      "notes": "'Guy hits space bar 5 times. Sometimes hard, sometimes harder' (Zoom H1; the stereo file is dual mono). Each hit is a deep thud followed by a few small plastic rattles, which is the stabilizer rattle the cue asks for. The keyboard type is not stated and it sounds like a flat or laptop-style board rather than a mechanical one: dull and low (centroid 1.2-1.7 kHz, under 6 % above 5 kHz), the softest cue in the pack. Hit 3 (94 ms, much denser) was left out as an outlier. The press slices keep the rattles up to just before the release tick (0.23-0.30 s). Source noise about -59..-62 dBFS (Zoom H1 hiss).",
+      "process": "Decode the Freesound HQ preview with ffmpeg (-i <id>-hq.mp3 -c:a pcm_s16le, native sample rate); times below are seconds from the start of that decoded file. Mono (L=R); causal 4th-order Butterworth high-pass at 150 Hz (the raw hit carries about 60 % of its energy below 160 Hz). Every slice: starts 3.5 ms before its transient, 2.5 ms linear fade-in, cos^2 fade-out, normalised to peak 0.85, 16-bit mono. Fade-out 60 ms. Slices (first sample, length, gain): 01 @0.1996 s, 300 ms, +0.5 dB; 02 @1.6365 s, 304 ms, +5.2 dB; 03 @4.0050 s, 226 ms, +7.7 dB; 04 @5.1515 s, 226 ms, +7.4 dB"
+    },
+    "space-release": {
+      "files": ["space-release-01.wav", "space-release-02.wav", "space-release-03.wav", "space-release-04.wav"],
+      "loop": false,
+      "sources": [
+        { "id": 331347, "title": "Space bar hits", "author": "diniunicorn", "url": "https://freesound.org/people/diniunicorn/sounds/331347/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }
+      ],
+      "notes": "The small upstroke thump that follows each hit (hits 1, 3, 4 and 5; hit 2 has no clear one). Soft and low (most energy below 300 Hz), about 80 ms long; the same hiss caveat applies because the source peaks at about -18 dBFS.",
+      "process": "Decode the Freesound HQ preview with ffmpeg (-i <id>-hq.mp3 -c:a pcm_s16le, native sample rate); times below are seconds from the start of that decoded file. Same chain as space-press (high-pass 150 Hz, 4th order). Each slice starts 3.5 ms before the thump and lasts 75 ms plus pre-roll. Every slice: starts 3.5 ms before its transient, 2.5 ms linear fade-in, cos^2 fade-out, normalised to peak 0.85, 16-bit mono. Fade-out 35 ms. Slices: 01 @0.6933 s, 78 ms, +18.5 dB; 02 @3.5199 s, 80 ms, +14.2 dB; 03 @4.2337 s, 78 ms, +16.8 dB; 04 @5.3790 s, 78 ms, +15.1 dB"
+    },
+    "keycap-scatter": {
+      "files": ["keycap-scatter-01.wav", "keycap-scatter-02.wav", "keycap-scatter-03.wav", "keycap-scatter-04.wav", "keycap-scatter-05.wav", "keycap-scatter-06.wav"],
+      "loop": false,
+      "sources": [
+        { "id": 570688, "title": "plastic lids tumbling around and colliding", "author": "breadparticles", "url": "https://freesound.org/people/breadparticles/sounds/570688/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }
+      ],
+      "notes": "Substitute texture. No CC0 recording of loose keycaps turned up. This is the closest: 'various plastic lids being tossed around and dropped on top of one another, recorded at my desk, slightly edited to reduce background noise' (mono, 49 s, 83 events). Hollow plastic discs on a desk give the same tok-tak scatter, centred around 1.5-2.5 kHz. LEGO-brick recordings were tried and rejected: roughly 25-90 % of their energy is above 8 kHz (centroid 6-10 kHz) and they would sound piercing. Six bursts of 0.34-0.40 s, each starting on its strongest hit (the first hit is at least 45 % of the slice peak) so the clatter lands with the foot.",
+      "process": "Decode the Freesound HQ preview with ffmpeg (-i <id>-hq.mp3 -c:a pcm_s16le, native sample rate); times below are seconds from the start of that decoded file. Mono; causal 2nd-order Butterworth high-pass at 80 Hz. Every slice: starts 3.5 ms before its transient, 2.5 ms linear fade-in, cos^2 fade-out, normalised to peak 0.85, 16-bit mono. Fade-out 60 ms. Slices (first sample, length, gain): 01 @38.8067 s, 344 ms, +15.3 dB; 02 @30.6922 s, 404 ms, +12.6 dB; 03 @25.2452 s, 364 ms, +5.0 dB; 04 @4.4162 s, 364 ms, +7.0 dB; 05 @15.0362 s, 364 ms, +12.1 dB; 06 @33.0427 s, 404 ms, +13.8 dB"
+    },
+    "enter-press": {
+      "files": ["enter-press-01.wav"],
+      "loop": false,
+      "sources": [
+        { "id": 789629, "title": "Keychron k10 Enter", "author": "Sadiquecat", "url": "https://freesound.org/people/Sadiquecat/sounds/789629/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }
+      ],
+      "notes": "One Enter hit on the same Keychron K10 (linear) and recorder as the red cue; the Enter key is large and stabilised, so the body is deeper than a letter key. Only one clean take exists, so a single slice (the press part, up to the release). Other CC0 Enter sounds were rejected: alpinemesh Corsair K70 (18 % above 10 kHz, harsh) and HunteR4708 Logitech K120 (bass-heavy, 20-25 % in 5-10 kHz after filtering). For variety the game can also reuse the brown or red presses at a lower pitch.",
+      "process": "Decode the Freesound HQ preview with ffmpeg (-i <id>-hq.mp3 -c:a pcm_s16le, native sample rate); times below are seconds from the start of that decoded file. Same chain as red-press (4th-order high-pass 150 Hz, notches 7330/14660 Hz, broad notch 8600 Hz, low-pass 7.5 kHz), mono mix of the 48 kHz stereo file. Every slice: starts 3.5 ms before its transient, 2.5 ms linear fade-in, cos^2 fade-out, normalised to peak 0.85, 16-bit mono. Fade-out 40 ms. Slice (first sample, length, gain): 01 @0.0127 s, 92 ms, +1.2 dB"
+    }
+  },
+  "missing": []
+}

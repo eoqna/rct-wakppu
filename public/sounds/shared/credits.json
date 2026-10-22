@@ -1,0 +1,27 @@
+{
+  "pack": "shared",
+  "cues": {
+    "blue-press": {
+      "files": ["blue-press-01.wav", "blue-press-02.wav", "blue-press-03.wav", "blue-press-04.wav", "blue-press-05.wav", "blue-press-06.wav", "blue-press-07.wav", "blue-press-08.wav", "blue-press-09.wav", "blue-press-10.wav"],
+      "loop": false,
+      "sources": [{ "id": 638035, "title": "Mechanical Keyboard Typing Cherry Blue Switches", "author": "simeonradivoev", "url": "https://freesound.org/people/simeonradivoev/sounds/638035/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }],
+      "notes": "Cherry MX Blue keys on a HyperX board, one key at a time. Used by the prototype and approved by ear (\"타건소리는 좋아졌고\").",
+      "process": "Sliced in the prototype session from the Freesound HQ preview MP3: 10 single presses, levels matched."
+    },
+    "blue-release": {
+      "files": ["blue-release-01.wav", "blue-release-02.wav", "blue-release-03.wav", "blue-release-04.wav", "blue-release-05.wav", "blue-release-06.wav"],
+      "loop": false,
+      "sources": [{ "id": 638035, "title": "Mechanical Keyboard Typing Cherry Blue Switches", "author": "simeonradivoev", "url": "https://freesound.org/people/simeonradivoev/sounds/638035/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }],
+      "notes": "Upstrokes from the same recording.",
+      "process": "Sliced in the prototype session from the Freesound HQ preview MP3: 6 single releases, levels matched."
+    },
+    "wax-crunch": {
+      "files": ["wax-crunch-01.wav", "wax-crunch-02.wav", "wax-crunch-03.wav", "wax-crunch-04.wav", "wax-crunch-05.wav", "wax-crunch-06.wav", "wax-crunch-07.wav"],
+      "loop": false,
+      "sources": [{ "id": 336633, "title": "Dried eggshell crunch", "author": "Anthousai", "url": "https://freesound.org/people/Anthousai/sounds/336633/", "license": "CC0", "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/" }],
+      "notes": "No CC0 wax-ball recording exists; a dried eggshell crunch is the closest texture. Used by the prototype.",
+      "process": "Sliced in the prototype session from the Freesound HQ preview MP3: 7 whole crunch bursts (0.4-0.8 s, stereo), peak 0.85."
+    }
+  },
+  "missing": []
+}

@@ -1,0 +1,71 @@
+[
+ {
+  "do": "waitFor",
+  "expr": "!!window.__wakppu",
+  "ms": 20000
+ },
+ {
+  "do": "wait",
+  "ms": 600
+ },
+ {
+  "do": "eval",
+  "expr": "window.__wakppu.game.selectDifficulty('hard'); true"
+ },
+ {
+  "do": "wait",
+  "ms": 800
+ },
+ {
+  "do": "press",
+  "code": "Enter"
+ },
+ {
+  "do": "wait",
+  "ms": 1500
+ },
+ {
+  "do": "eval",
+  "expr": "(() => { const w = window.__wakppu, L = w.layout(); window.__ball = L.platforms.findIndex(p => p.skinId === 'waxBall'); return w.teleport(window.__ball) })()"
+ },
+ {
+  "do": "wait",
+  "ms": 250
+ },
+ {
+  "do": "expect",
+  "name": "wax ball cracked",
+  "expr": "window.__wakppu.game.platforms[window.__ball].cracked",
+  "equals": true
+ },
+ {
+  "do": "hide"
+ },
+ {
+  "do": "wait",
+  "ms": 1500
+ },
+ {
+  "do": "show"
+ },
+ {
+  "do": "wait",
+  "ms": 100
+ },
+ {
+  "do": "expect",
+  "name": "time behind a hidden tab does not count toward the collapse",
+  "expr": "window.__wakppu.game.platforms[window.__ball].collapsed",
+  "equals": false
+ },
+ {
+  "do": "wait",
+  "ms": 1200
+ },
+ {
+  "do": "expect",
+  "name": "collapses once 0.7 s of play has passed",
+  "expr": "window.__wakppu.game.platforms[window.__ball].collapsed",
+  "equals": true
+ }
+]

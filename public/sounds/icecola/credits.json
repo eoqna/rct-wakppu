@@ -1,0 +1,137 @@
+{
+  "pack": "icecola",
+  "cues": {
+    "snow-step": {
+      "files": [
+        "snow-step-01.wav",
+        "snow-step-02.wav",
+        "snow-step-03.wav",
+        "snow-step-04.wav",
+        "snow-step-05.wav",
+        "snow-step-06.wav",
+        "snow-step-07.wav",
+        "snow-step-08.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 378056,
+          "title": "sfx_snow_footstep-01.wav",
+          "author": "bajko",
+          "url": "https://freesound.org/people/bajko/sounds/378056/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "Real recording of someone walking on snow with a handheld stereo recorder (Olympus LS-11, per the author): a 2:48 take, 48 kHz/24-bit stereo, with roughly 160 separate footsteps ('many different versions'). Eight isolated single steps (0.23-0.28 s) were cut from 28-41 s, 53 s, 79 s and 87 s. Each is a dry compacted-snow crunch with a broadband crumbly texture (spectral centroid 1.6-2.4 kHz, 6-18% of the energy above 5 kHz), with no wind and no voice. Noise floor between steps is about -61 to -64 dBFS and the source is not clipped. Slices were picked for similar level (RMS -21.6 to -18.9 dBFS after peak normalization). Fit: this is the crunch of a snow step; whether it also has the squeaky '뽀드득' edge is the first thing to listen for.",
+      "process": "Decoded each source's Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le), mono mix (L+R)/2 for stereo. Slices as '<file>: #<source id> <cut start>-<cut end> seconds in the decoded preview (gain)': 01: #378056 36.322-36.555 s (+15.3 dB); 02: #378056 38.245-38.500 s (+19.0 dB); 03: #378056 39.206-39.465 s (+19.0 dB); 04: #378056 41.212-41.455 s (+22.0 dB); 05: #378056 28.360-28.635 s (+21.2 dB); 06: #378056 79.363-79.610 s (+16.8 dB); 07: #378056 87.028-87.255 s (+16.9 dB); 08: #378056 53.154-53.380 s (+20.6 dB). Cut start = 3.0 ms before the first 1 ms peak >= 25.0% of the event peak; cut end = event end + 20 ms; 2.5 ms cosine fade-in, 50 ms cosine fade-out, peak normalized to 0.85, 16-bit PCM at the source rate; 2nd-order high-pass at 40 Hz before cutting."
+    },
+    "ice-crack": {
+      "files": [
+        "ice-crack-01.wav",
+        "ice-crack-02.wav",
+        "ice-crack-03.wav",
+        "ice-crack-04.wav",
+        "ice-crack-05.wav",
+        "ice-crack-06.wav",
+        "ice-crack-07.wav",
+        "ice-crack-08.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 625740,
+          "title": "Foley_Natural_Ice_Breaking_Sequence_Stereo.wav",
+          "author": "Nox_Sound",
+          "url": "https://freesound.org/people/Nox_Sound/sounds/625740/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "'Ice Breaking in Iceland' foley sequence (Tascam DR-05, 48 kHz/24-bit stereo, 43 s) of natural ice being broken: sharp cracks followed by crunchy shards. Each slice is one break event of 0.19-0.46 s, an initial crack plus a few smaller cracks and crunch, and every slice starts on its first strong crack so the sound lands with the foot. Centroid 2.0-2.9 kHz with 13-21% of the energy above 5 kHz, which is calmer than the other ice recordings tried (puddle-ice footsteps #213578 had a -53 dBFS noise floor, several others were clipped or measured 6-9 kHz centroids). Noise floor about -60 dBFS. The decoded preview has two isolated single-sample peaks of +0.3 dBFS on the loudest cracks (mp3 overshoot, not flat-topped clipping); slice 03 contains one of them, and every slice is scaled to 0.85 anyway. Closest match to thin ice breaking underfoot that was clean enough, but the source is a break-by-hand sequence, so slices hold 2-4 cracks rather than one snap.",
+      "process": "Decoded each source's Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le), mono mix (L+R)/2 for stereo. Slices as '<file>: #<source id> <cut start>-<cut end> seconds in the decoded preview (gain)': 01: #625740 1.546-1.960 s (+0.6 dB); 02: #625740 23.082-23.275 s (+4.4 dB); 03: #625740 42.042-42.330 s (+0.7 dB); 04: #625740 20.564-21.025 s (+3.6 dB); 05: #625740 10.616-10.890 s (+4.8 dB); 06: #625740 14.121-14.495 s (+1.2 dB); 07: #625740 24.771-25.070 s (+1.3 dB); 08: #625740 32.410-32.745 s (+3.2 dB). Cut start = 3.0 ms before the first 1 ms peak >= 25.0% of the event peak; cut end = event end + 30 ms; 2.5 ms cosine fade-in, 60 ms cosine fade-out, peak normalized to 0.85, 16-bit PCM at the source rate; 2nd-order high-pass at 60 Hz before cutting."
+    },
+    "ice-clink": {
+      "files": [
+        "ice-clink-01.wav",
+        "ice-clink-02.wav",
+        "ice-clink-03.wav",
+        "ice-clink-04.wav",
+        "ice-clink-05.wav",
+        "ice-clink-06.wav",
+        "ice-clink-07.wav",
+        "ice-clink-08.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 707424,
+          "title": "Ice Cubes",
+          "author": "IENBA",
+          "url": "https://freesound.org/people/IENBA/sounds/707424/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "Ice cubes moving and knocking inside a half-filled glass jar, recorded close with a Sennheiser MKH 50 (mono, 48 kHz/24-bit; tagged clink/clunk). Very clean: noise floor about -72 dBFS and no clipping. Centroid 1.8-2.8 kHz and at most 8% of the energy above 5 kHz, so there is no sizzle. Slices are short rattles of 2-5 hits (0.16-0.42 s), the '달그락' feel, each starting on a strong hit. Listen for first: the jar rings at about 2.55 kHz (20-30% of the energy in five of the eight slices; the others ring near 1.5 kHz). That is the glass 'ting' and is the only possibly sharp part.",
+      "process": "Decoded each source's Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le), mono mix (L+R)/2 for stereo. Slices as '<file>: #<source id> <cut start>-<cut end> seconds in the decoded preview (gain)': 01: #707424 3.945-4.180 s (+14.7 dB); 02: #707424 5.774-6.015 s (+16.6 dB); 03: #707424 6.982-7.275 s (+20.9 dB); 04: #707424 7.472-7.705 s (+19.5 dB); 05: #707424 10.071-10.235 s (+15.5 dB); 06: #707424 2.652-2.865 s (+16.0 dB); 07: #707424 1.141-1.480 s (+13.5 dB); 08: #707424 6.441-6.865 s (+17.5 dB). Cut start = 3.0 ms before the first 1 ms peak >= 25.0% of the event peak; cut end = event end + 20 ms; 2.5 ms cosine fade-in, 50 ms cosine fade-out, peak normalized to 0.85, 16-bit PCM at the source rate; 2nd-order high-pass at 60 Hz before cutting."
+    },
+    "cola-land": {
+      "files": [
+        "cola-land-01.wav",
+        "cola-land-02.wav",
+        "cola-land-03.wav",
+        "cola-land-04.wav",
+        "cola-land-05.wav"
+      ],
+      "loop": false,
+      "sources": [
+        {
+          "id": 521898,
+          "title": "Foley_CansBottles_Open.wav",
+          "author": "MrFossy",
+          "url": "https://freesound.org/people/MrFossy/sounds/521898/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        },
+        {
+          "id": 344604,
+          "title": "Opening_Soda_Can.wav",
+          "author": "vcspran",
+          "url": "https://freesound.org/people/vcspran/sounds/344604/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        },
+        {
+          "id": 175830,
+          "title": "Opening a soda can.wav",
+          "author": "amthomas101",
+          "url": "https://freesound.org/people/amthomas101/sounds/175830/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "Five bursts from three different can/bottle openings: tab click plus the first gas hiss ('칙', 0.13-0.29 s). Three from MrFossy's supercut of cans and bottles being opened (Tascam DR-40x, digital silence between events), one from vcspran's can opening, one from amthomas101's can opening. The raw gas hiss in these recordings is very bright (centroid 5-10 kHz, up to 99% of the energy above 5 kHz), which is the ear-piercing risk, so a gentle 2nd-order low-pass at 7 kHz plus a -4 dB high shelf above 4.5 kHz was applied (centroid is now 1.7-4.2 kHz). Pure-hiss events, clicky multi-part events and one burst whose energy sat 37% in a 3.6 kHz can-rim ring (#344604 at 0.77 s) were skipped. Different cans give slightly different timbres, which should read as natural variation. Only five clean slices exist, which is within the 4-6 asked for.",
+      "process": "Decoded each source's Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le), mono mix (L+R)/2 for stereo. Slices as '<file>: #<source id> <cut start>-<cut end> seconds in the decoded preview (gain)': 01: #521898 17.087-17.321 s (+3.2 dB); 02: #521898 13.643-13.933 s (+7.9 dB); 03: #344604 1.159-1.365 s (+4.6 dB); 04: #175830 1.838-2.075 s (+6.1 dB); 05: #521898 9.179-9.309 s (+7.4 dB). Cut start = 3.0 ms before the first 1 ms peak >= 25.0% of the event peak; cut end = event end + 40 ms; 2.5 ms cosine fade-in, 60 ms cosine fade-out, peak normalized to 0.85, 16-bit PCM at the source rate; 2nd-order high-pass at 100 Hz before cutting; 2nd-order low-pass at 7000 Hz before cutting; high-shelf -4.0 dB above 4500 Hz before cutting."
+    },
+    "cola-fizz-loop": {
+      "files": [
+        "cola-fizz-loop-01.wav"
+      ],
+      "loop": true,
+      "sources": [
+        {
+          "id": 245643,
+          "title": "Cola Into Glass",
+          "author": "unfa",
+          "url": "https://freesound.org/people/unfa/sounds/245643/",
+          "license": "CC0",
+          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/"
+        }
+      ],
+      "notes": "'Cola Into Glass': Pepsi poured into a tall glass, Zoom H2, 48 kHz/16-bit stereo. L/R correlation is 0.88, so a mono mix is used. The 3.0 s loop is the dense carbonation fizz just after the pour (11.5-14.65 s of the file): steady broadband crackle with a resonant band near 1 kHz from the glass. Level varies only 2.6 dB across the loop and head and tail match in level and spectrum, so the 150 ms equal-power crossfade is inaudible. Peak 0.7, RMS about -22 dBFS. Other fizz recordings were either quiet near the noise floor, almost pure white hiss, or (the stronger crackle ones) not stationary. Author note: the description asks that the sound not be used to train generative ML models, which does not apply to this game but is worth knowing. Listen for first: whether the 1 kHz band reads as a faint tone during a long stand.",
+      "process": "Decoded the Freesound -hq.mp3 preview with ffmpeg (-c:a pcm_f32le), mono mix (L+R)/2 for stereo. Took #245643 11.500-14.650 s (+14.4 dB) (seconds in the decoded preview; the last 150 ms are the crossfade tail), blended that 150 ms tail into the first 150 ms with an equal-power (sin/cos) crossfade so the file loops seamlessly, peak normalized to 0.70, 16-bit PCM at the source rate; 2nd-order high-pass at 40 Hz."
+    }
+  },
+  "missing": []
+}

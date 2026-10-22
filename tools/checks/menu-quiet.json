@@ -1,0 +1,43 @@
+[
+ {
+  "do": "waitFor",
+  "expr": "!!window.__wakppu",
+  "ms": 20000
+ },
+ {
+  "do": "wait",
+  "ms": 600
+ },
+ {
+  "do": "press",
+  "code": "Enter"
+ },
+ {
+  "do": "wait",
+  "ms": 1500
+ },
+ {
+  "do": "eval",
+  "expr": "(() => { const w = window.__wakppu, g = w.game, L = w.layout(), i = L.platforms.findIndex(p => p.skinId === 'sodaJelly'), p = L.platforms[i]; w.teleport(i); Object.assign(g.player, { x: p.x, z: p.z, y: p.top + 2.5, vx: 0, vy: 0, vz: 0, grounded: false, ground: null }); return i })()"
+ },
+ {
+  "do": "eval",
+  "expr": "window.__wakppu.game.openMenu(); true"
+ },
+ {
+  "do": "wait",
+  "ms": 1500
+ },
+ {
+  "do": "expect",
+  "name": "start screen: no loop playing behind it",
+  "expr": "window.__wakppu.info().loops",
+  "equals": 0
+ },
+ {
+  "do": "expect",
+  "name": "still on the start screen",
+  "expr": "window.__wakppu.info().screen",
+  "equals": "menu"
+ }
+]
