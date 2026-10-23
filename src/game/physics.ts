@@ -93,6 +93,10 @@ export function stepPlayer(p: PlayerState, world: World, moveX: number, moveZ: n
     ev.groundChanges.push(c)
   }
 
+  // ride a platform as it squashes or presses down, before the jump: a jump from a top that
+  // has since risen would meet the platform just left as a wall and be pushed out sideways
+  if (p.grounded && p.ground && Math.abs(p.ground.top - p.y) < PHYSICS.rideSnap) p.y = p.ground.top
+
   if (p.jumpBuf > 0) p.jumpBuf -= dt
   if (p.jumpBuf > 0 && (p.grounded || p.coyote > 0)) {
     p.vy = PLAYER.jumpSpeed; p.jumpBuf = 0; p.coyote = 0
@@ -103,9 +107,6 @@ export function stepPlayer(p: PlayerState, world: World, moveX: number, moveZ: n
   const accel = (p.grounded ? PLAYER.accelGround : PLAYER.accelAir) * dt
   p.vx = approach(p.vx, moveX * PLAYER.runSpeed, accel)
   p.vz = approach(p.vz, moveZ * PLAYER.runSpeed, accel)
-
-  // ride a platform as it squashes or presses down
-  if (p.grounded && p.ground && Math.abs(p.ground.top - p.y) < PHYSICS.rideSnap) p.y = p.ground.top
 
   const h = dt / PHYSICS.substeps
   for (let i = 0; i < PHYSICS.substeps; i++) substep(p, world, h, ev, setGround)

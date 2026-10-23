@@ -106,4 +106,18 @@ describe('jumping', () => {
     expect(apex).toBeLessThan(1.75)
     expect(p.y).toBe(0)
   })
+
+  it('jumps straight up off a platform whose top rose since the last frame', () => {
+    // a jelly springing back after a landing lifts its top about 1 cm between two physics frames
+    const jelly = makeCollider(1, 10, 0, 0, 0.8, 0.8, 1, 0)
+    const w = world([jelly])
+    const p = createPlayer()
+    resetPlayer(p, 10, 1.01, 0)
+    simulate(w, p, 10)
+    jelly.top += 0.01
+    requestJump(p)
+    expect(stepPlayer(p, w, 0, 0, DT).jumped).toBe(true)
+    expect(p.x).toBeCloseTo(10, 6)
+    expect(p.z).toBeCloseTo(0, 6)
+  })
 })
