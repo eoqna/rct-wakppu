@@ -11,6 +11,15 @@
 //   { "do": "down", "code": "KeyW" } / { "do": "up", "code": "KeyW" }
 //   { "do": "click", "selector": "button.start" }
 //   { "do": "drag", "dx": 200, "dy": 0 }               mouse drag across the middle of the page
+//   { "do": "mobile", "width": 844, "height": 390 }    phone screen with touch; "reload" after it so the page starts as on a phone
+//   { "do": "tap", "selector": ".jump" }               finger tap on an element's centre
+//   { "do": "swipe", "selector": ".stick-zone", "dx": 0, "dy": -60, "hold": 1000 }
+//                                                      finger drag from an element's centre (or from "x", "y"), held "hold" ms;
+//                                                      "lift": false leaves the finger down for the next steps
+//   { "do": "lift" }                                   lifts every finger still down
+//   { "do": "pinch", "x": 600, "y": 160, "from": 80, "to": 200 }   two fingers spreading (or closing) around a point
+// DevTools presses fingers one by one but lifts them only all at once, so a tap made while a swipe
+// finger is held stays down too, until the next "lift".
 //   { "do": "eval", "expr": "window.__wakppu.info()", "as": "name" }
 //   { "do": "hide" } / { "do": "show" }                fires visibilitychange with document.hidden faked
 //   { "do": "shot", "file": "start.png" }
@@ -113,6 +122,21 @@ const key = async (type, code) => {
   })
 }
 const mouse = (type, x, y, buttons = 1) => page('Input.dispatchMouseEvent', { type, x, y, button: 'left', buttons, clickCount: 1 })
+const centre = (selector) => evaluate(`(() => { const r = document.querySelector(${JSON.stringify(selector)})?.getBoundingClientRect(); return r ? { x: r.x + r.width / 2, y: r.y + r.height / 2 } : null })()`)
+
+// every touch event lists all the fingers that are down
+let fingers = []
+let fingerId = 1
+const finger = (x, y) => ({ x, y, id: fingerId++ })
+const press = async (...pts) => {
+  fingers.push(...pts)
+  await page('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: fingers })
+}
+const slide = () => page('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: fingers })
+const liftAll = async () => {
+  fingers = []
+  await page('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] })
+}
 
 await page('Page.navigate', { url })
 await sleep(300)
@@ -135,7 +159,7 @@ for (const step of steps) {
     case 'up': await key('keyUp', step.code); break
     case 'hold': await key('keyDown', step.code); await sleep(step.ms); await key('keyUp', step.code); break
     case 'click': {
-      const box = await evaluate(`(() => { const r = document.querySelector(${JSON.stringify(step.selector)})?.getBoundingClientRect(); return r ? { x: r.x + r.width / 2, y: r.y + r.height / 2 } : null })()`)
+      const box = await centre(step.selector)
       if (!box) { report.results[`click:${step.selector}`] = 'NOT FOUND'; break }
       await mouse('mousePressed', box.x, box.y); await mouse('mouseReleased', box.x, box.y, 0)
       break
@@ -145,6 +169,43 @@ for (const step of steps) {
       await mouse('mousePressed', x, y)
       for (let i = 1; i <= 10; i++) { await mouse('mouseMoved', x + (step.dx * i) / 10, y + ((step.dy ?? 0) * i) / 10); await sleep(16) }
       await mouse('mouseReleased', x + step.dx, y + (step.dy ?? 0), 0)
+      break
+    }
+    case 'mobile':
+      await page('Emulation.setDeviceMetricsOverride', { width: step.width, height: step.height, deviceScaleFactor: 2, mobile: true })
+      await page('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 })
+      break
+    case 'tap': {
+      const at = await centre(step.selector)
+      if (!at) { report.results[`tap:${step.selector}`] = 'NOT FOUND'; break }
+      const alone = fingers.length === 0
+      await press(finger(at.x, at.y)); await sleep(40)
+      if (alone) await liftAll()
+      break
+    }
+    case 'swipe': {
+      const from = step.selector ? await centre(step.selector) : { x: step.x, y: step.y }
+      if (!from) { report.results[`swipe:${step.selector}`] = 'NOT FOUND'; break }
+      const f = finger(from.x, from.y)
+      await press(f)
+      for (let i = 1; i <= 10; i++) {
+        f.x = from.x + (step.dx * i) / 10; f.y = from.y + ((step.dy ?? 0) * i) / 10
+        await slide(); await sleep(16)
+      }
+      if (step.hold) await sleep(step.hold)
+      if (step.lift !== false) await liftAll()
+      break
+    }
+    case 'lift': await liftAll(); break
+    case 'pinch': {
+      const a = finger(step.x - step.from / 2, step.y), b = finger(step.x + step.from / 2, step.y)
+      await press(a, b)
+      for (let i = 1; i <= 10; i++) {
+        const half = (step.from + ((step.to - step.from) * i) / 10) / 2
+        a.x = step.x - half; b.x = step.x + half
+        await slide(); await sleep(16)
+      }
+      await liftAll()
       break
     }
     case 'eval': {

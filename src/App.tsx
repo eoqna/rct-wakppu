@@ -4,10 +4,10 @@ import { getBrowserStorage } from './game/save.ts'
 import { ClearScreen } from './ui/ClearScreen.tsx'
 import { Hud } from './ui/Hud.tsx'
 import { StartScreen } from './ui/StartScreen.tsx'
+import { TouchControls } from './ui/TouchControls.tsx'
 import { useGameState } from './ui/useGame.ts'
+import { useTouchMode } from './ui/useTouch.ts'
 import './ui/ui.css'
-
-const touch = typeof window.matchMedia === 'function' && window.matchMedia('(hover: none) and (pointer: coarse)').matches
 
 export default function App() {
   const host = useRef<HTMLDivElement>(null)
@@ -41,10 +41,12 @@ export default function App() {
 
 function Screens({ game }: { game: Game }) {
   const state = useGameState(game)
+  const touch = useTouchMode()
   return (
     <>
       {state.screen === 'menu' && <StartScreen game={game} state={state} touch={touch} />}
-      {state.screen !== 'menu' && <Hud game={game} state={state} />}
+      {state.screen !== 'menu' && <Hud game={game} state={state} touch={touch} />}
+      {state.screen === 'playing' && touch && <TouchControls game={game} />}
       {state.screen === 'cleared' && state.clear && <ClearScreen game={game} clear={state.clear} />}
     </>
   )

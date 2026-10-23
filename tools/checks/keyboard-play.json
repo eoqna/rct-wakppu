@@ -1,0 +1,30 @@
+[
+ { "do": "waitFor", "expr": "!!window.__wakppu", "ms": 20000 },
+ { "do": "wait", "ms": 600 },
+ { "do": "expect", "name": "a desktop is not a touch screen", "expr": "matchMedia('(hover: none) and (pointer: coarse)').matches", "equals": false },
+ { "do": "press", "code": "Enter" },
+ { "do": "wait", "ms": 1500 },
+ {
+  "do": "expect",
+  "name": "no thumb controls on a desktop; keyboard hints and the volume slider stay",
+  "expr": "!document.querySelector('.touch-pad') && !!document.querySelector('.hints') && !!document.querySelector('.volume')",
+  "equals": true
+ },
+ { "do": "expect", "name": "a desktop keeps the tuned view angle", "expr": "window.__wakppu.info().camera.fov", "equals": 55 },
+ { "do": "eval", "expr": "(() => { window.__p0 = window.__wakppu.info().player; return window.__p0 })()", "as": "startPosition" },
+ { "do": "hold", "code": "KeyW", "ms": 800 },
+ {
+  "do": "expect",
+  "name": "W walks the player",
+  "expr": "(() => { const p = window.__wakppu.info().player; return Math.hypot(p.x - window.__p0.x, p.z - window.__p0.z) > 1.5 })()",
+  "equals": true
+ },
+ { "do": "wait", "ms": 300 },
+ { "do": "eval", "expr": "window.__y0 = window.__wakppu.info().player.y; true" },
+ { "do": "press", "code": "Space" },
+ { "do": "wait", "ms": 200 },
+ { "do": "expect", "name": "Space jumps", "expr": "window.__wakppu.info().player.y > window.__y0 + 0.5", "equals": true },
+ { "do": "eval", "expr": "window.__yaw = window.__wakppu.info().camera.yaw; true" },
+ { "do": "drag", "dx": 200, "dy": 0 },
+ { "do": "expect", "name": "a mouse drag turns the camera", "expr": "window.__wakppu.info().camera.yaw < window.__yaw - 0.5", "equals": true }
+]

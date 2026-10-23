@@ -80,18 +80,27 @@ export function StartScreen({ game, state, touch }: { game: Game; state: UiState
         </div>
 
 
-        {touch && <p className="note error">이 게임은 키보드로 조작해요. PC에서 열어 주세요.</p>}
+        {touch && <p className="note portrait-only">휴대폰은 가로로 돌리면 더 넓게 보여요.</p>}
         <details className="more">
           <summary>조작법</summary>
-          <ul className="keys">
-            <li><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span>이동 (방향키도 돼요)</li>
-            <li><span><kbd className="wide">Space</kbd></span>점프</li>
-            <li><span>마우스 드래그</span>시점 돌리기, 휠은 줌</li>
-            <li><span><kbd>R</kbd></span>마지막 체크포인트로</li>
-            <li><span><kbd>M</kbd></span>소리 끄기</li>
-            <li><span><kbd>Esc</kbd></span>처음 화면</li>
-          </ul>
-          <p className="note">카메라는 마우스로 돌릴 때만 움직이고, 이동은 화면 기준이에요. 이어폰을 끼면 소리가 더 잘 들려요.</p>
+          {touch ? (
+            <ul className="keys">
+              <li><span>왼쪽 아래 밀기</span>이동 (엄지를 대고 미는 쪽으로)</li>
+              <li><span>점프 버튼</span>점프 (오른쪽 아래)</li>
+              <li><span>화면 드래그</span>시점 돌리기, 두 손가락을 벌리면 줌</li>
+              <li><span>위쪽 버튼</span>체크포인트로, 소리 끄기, 처음 화면</li>
+            </ul>
+          ) : (
+            <ul className="keys">
+              <li><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span>이동 (방향키도 돼요)</li>
+              <li><span><kbd className="wide">Space</kbd></span>점프</li>
+              <li><span>마우스 드래그</span>시점 돌리기, 휠은 줌</li>
+              <li><span><kbd>R</kbd></span>마지막 체크포인트로</li>
+              <li><span><kbd>M</kbd></span>소리 끄기</li>
+              <li><span><kbd>Esc</kbd></span>처음 화면</li>
+            </ul>
+          )}
+          <p className="note">카메라는 {touch ? '손가락으로' : '마우스로'} 돌릴 때만 움직이고, 이동은 화면 기준이에요. 이어폰을 끼면 소리가 더 잘 들려요.</p>
         </details>
         <details className="more">
           <summary>소리 출처</summary>
@@ -110,7 +119,9 @@ export function StartScreen({ game, state, touch }: { game: Game; state: UiState
           ) : (
             <>
               <button type="button" className="keycap big" onClick={() => game.start('fresh')}>시작하기</button>
-              <span className="note">또는 <kbd>Enter</kbd> · <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 이동, <kbd className="wide">Space</kbd> 점프</span>
+              {touch
+                ? <span className="note">왼쪽 아래를 밀어 이동, 오른쪽 아래 버튼으로 점프</span>
+                : <span className="note">또는 <kbd>Enter</kbd> · <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 이동, <kbd className="wide">Space</kbd> 점프</span>}
             </>
           )}
           {record && <p className="note resume-note">이 난이도 최고 기록 {fmtTime(record.bestTime)} · 클리어 {record.clears}번</p>}

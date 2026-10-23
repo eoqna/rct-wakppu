@@ -1,0 +1,95 @@
+[
+ { "do": "mobile", "width": 844, "height": 390 },
+ { "do": "reload" },
+ { "do": "waitFor", "expr": "!!window.__wakppu", "ms": 20000 },
+ { "do": "wait", "ms": 800 },
+ {
+  "do": "expect",
+  "name": "the page sees a touch screen",
+  "expr": "matchMedia('(hover: none) and (pointer: coarse)').matches",
+  "equals": true
+ },
+ {
+  "do": "expect",
+  "name": "the start screen explains the thumb controls and no longer sends phones to a PC",
+  "expr": "document.body.textContent.includes('왼쪽 아래를 밀어 이동') && !document.body.textContent.includes('PC에서 열어')",
+  "equals": true
+ },
+ {
+  "do": "expect",
+  "name": "start button fully visible on a landscape phone",
+  "expr": "(() => { const r = document.querySelector('.keycap.big').getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight })()",
+  "equals": true
+ },
+ { "do": "shot", "file": "touch-landscape-start.png" },
+ { "do": "tap", "selector": ".keycap.big" },
+ { "do": "wait", "ms": 1500 },
+ { "do": "expect", "name": "a tap on the start button starts the run", "expr": "window.__wakppu.info().screen", "equals": "playing" },
+ {
+  "do": "expect",
+  "name": "stick and jump button on screen; keyboard hints and the volume slider gone",
+  "expr": "!!document.querySelector('.stick-zone') && !!document.querySelector('.jump') && !document.querySelector('.hints') && !document.querySelector('.volume')",
+  "equals": true
+ },
+ {
+  "do": "expect",
+  "name": "stick area and jump button stay clear of the top panels",
+  "expr": "(() => { const hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom; const panels = [...document.querySelectorAll('.hud .panel')].map((p) => p.getBoundingClientRect()); return ['.stick-zone', '.jump'].map((s) => document.querySelector(s).getBoundingClientRect()).every((a) => panels.every((b) => !hit(a, b))) })()",
+  "equals": true
+ },
+ { "do": "expect", "name": "landscape keeps the tuned view angle", "expr": "window.__wakppu.info().camera.fov", "equals": 55 },
+ { "do": "eval", "expr": "(() => { window.__p0 = window.__wakppu.info().player; return window.__p0 })()", "as": "startPosition" },
+ { "do": "swipe", "selector": ".stick-zone", "dx": 0, "dy": 70, "hold": 1200, "lift": false },
+ { "do": "shot", "file": "touch-landscape-stick.png" },
+ {
+  "do": "expect",
+  "name": "holding the stick walks the player (back, out onto the open floor)",
+  "expr": "(() => { const p = window.__wakppu.info().player; return Math.hypot(p.x - window.__p0.x, p.z - window.__p0.z) > 1.5 && Math.hypot(p.x, p.z) > Math.hypot(window.__p0.x, window.__p0.z) })()",
+  "equals": true
+ },
+ { "do": "eval", "expr": "(() => { window.__j0 = window.__wakppu.info().player; return window.__j0 })()", "as": "beforeJump" },
+ { "do": "tap", "selector": ".jump" },
+ { "do": "wait", "ms": 200 },
+ {
+  "do": "expect",
+  "name": "the jump button jumps while the other thumb holds the stick",
+  "expr": "window.__wakppu.info().player.y > window.__j0.y + 0.5",
+  "equals": true
+ },
+ {
+  "do": "expect",
+  "name": "the player keeps running through the jump",
+  "expr": "(() => { const p = window.__wakppu.info().player; return Math.hypot(p.x - window.__j0.x, p.z - window.__j0.z) > 0.5 && !!document.querySelector('.stick.held') })()",
+  "equals": true
+ },
+ { "do": "lift" },
+ { "do": "wait", "ms": 900 },
+ { "do": "eval", "expr": "window.__p1 = window.__wakppu.info().player; true" },
+ { "do": "wait", "ms": 400 },
+ {
+  "do": "expect",
+  "name": "letting go of the stick stops the player",
+  "expr": "(() => { const p = window.__wakppu.info().player; return Math.hypot(p.x - window.__p1.x, p.z - window.__p1.z) < 0.05 && !document.querySelector('.stick.held') })()",
+  "equals": true
+ },
+ { "do": "eval", "expr": "(() => { window.__cam = window.__wakppu.info().camera; return window.__cam })()", "as": "cameraBefore" },
+ { "do": "swipe", "x": 640, "y": 200, "dx": 120, "dy": 0 },
+ {
+  "do": "expect",
+  "name": "a finger dragged across the view turns the camera",
+  "expr": "window.__wakppu.info().camera.yaw < window.__cam.yaw - 0.3",
+  "equals": true
+ },
+ { "do": "pinch", "x": 640, "y": 200, "from": 80, "to": 200 },
+ {
+  "do": "expect",
+  "name": "spreading two fingers zooms in",
+  "expr": "window.__wakppu.info().camera.dist < window.__cam.dist - 2",
+  "equals": true
+ },
+ { "do": "eval", "expr": "window.__wakppu.info().camera", "as": "cameraAfter" },
+ { "do": "tap", "selector": ".hud .controls .keycap:nth-of-type(1)" },
+ { "do": "wait", "ms": 200 },
+ { "do": "expect", "name": "the mute button works with a tap", "expr": "document.querySelector('.hud .controls .keycap').textContent", "equals": "소리 켜기" },
+ { "do": "shot", "file": "touch-landscape-play.png" }
+]

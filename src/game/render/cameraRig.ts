@@ -64,17 +64,30 @@ export class CameraRig {
     this.dist = clamp(this.dist + deltaY * CAMERA.zoomPerDelta, CAMERA.minDist, CAMERA.maxDist)
   }
 
+  /** Two fingers whose gap grew by `scale` bring the camera that much closer. */
+  pinch(scale: number) {
+    this.dist = clamp(this.dist / scale, CAMERA.minDist, CAMERA.maxDist)
+  }
+
   /** Look from outside the tower toward this spot; the one turn the camera makes on its own. */
   faceFrom(x: number, z: number) {
     this.yaw = Math.atan2(x, z) + CAMERA.startOffset
   }
 
-  /** World direction for screen-relative input: ix right, iz forward. */
+  /** World direction for screen-relative input: ix right, iz forward. A stick pushed part way gives a shorter vector. */
   moveDir(ix: number, iz: number): [number, number] {
-    if (!ix && !iz) return [0, 0]
+    const len = Math.hypot(ix, iz)
+    if (!len) return [0, 0]
     const s = Math.sin(this.yaw), c = Math.cos(this.yaw)
-    const mx = c * ix - s * iz, mz = -s * ix - c * iz
-    const len = Math.hypot(mx, mz)
-    return [mx / len, mz / len]
+    // keyboard diagonals are longer than 1 and come out at full speed, not faster
+    const k = Math.min(1, len) / len
+    return [(c * ix - s * iz) * k, (-s * ix - c * iz) * k]
   }
+}
+
+/** Vertical view angle for a screen shape: portrait screens widen it, so the view keeps the width of a square screen. */
+export function fovFor(aspect: number) {
+  if (aspect >= 1) return CAMERA.fov
+  const half = THREE.MathUtils.degToRad(CAMERA.fov / 2)
+  return Math.min(CAMERA.maxFov, THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(half) / aspect)))
 }

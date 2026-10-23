@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { CAMERA, TOWER } from '../config.ts'
 import type { TowerTheme } from '../types.ts'
 import { rand } from '../util.ts'
+import { fovFor } from './cameraRig.ts'
 import { checkerTexture, gradientTexture, pillarTexture, setAnisotropy } from './textures.ts'
 
 export class WebGLUnavailableError extends Error {}
@@ -81,6 +82,7 @@ export class Stage {
     const w = this.canvas.clientWidth || window.innerWidth, h = this.canvas.clientHeight || window.innerHeight
     this.renderer.setSize(w, h, false)
     this.camera.aspect = w / h
+    this.camera.fov = fovFor(w / h)
     this.camera.updateProjectionMatrix()
   }
 

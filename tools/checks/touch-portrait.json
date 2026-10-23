@@ -1,0 +1,44 @@
+[
+ { "do": "mobile", "width": 390, "height": 844 },
+ { "do": "reload" },
+ { "do": "waitFor", "expr": "!!window.__wakppu", "ms": 20000 },
+ { "do": "wait", "ms": 800 },
+ {
+  "do": "expect",
+  "name": "a portrait phone is told the view is wider in landscape",
+  "expr": "getComputedStyle(document.querySelector('.portrait-only')).display !== 'none'",
+  "equals": true
+ },
+ {
+  "do": "expect",
+  "name": "start button fully visible on a portrait phone",
+  "expr": "(() => { const r = document.querySelector('.keycap.big').getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight })()",
+  "equals": true
+ },
+ { "do": "shot", "file": "touch-portrait-start.png" },
+ { "do": "tap", "selector": ".keycap.big" },
+ { "do": "wait", "ms": 1500 },
+ { "do": "expect", "name": "a tap on the start button starts the run", "expr": "window.__wakppu.info().screen", "equals": "playing" },
+ { "do": "expect", "name": "portrait widens the view angle", "expr": "window.__wakppu.info().camera.fov > 55", "equals": true },
+ {
+  "do": "expect",
+  "name": "stick area and jump button stay clear of the top panels",
+  "expr": "(() => { const hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom; const panels = [...document.querySelectorAll('.hud .panel')].map((p) => p.getBoundingClientRect()); return ['.stick-zone', '.jump'].map((s) => document.querySelector(s).getBoundingClientRect()).every((a) => panels.every((b) => !hit(a, b))) })()",
+  "equals": true
+ },
+ {
+  "do": "expect",
+  "name": "every control is inside the screen",
+  "expr": "[...document.querySelectorAll('.hud .panel, .jump, .stick')].every((e) => { const r = e.getBoundingClientRect(); return r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight })",
+  "equals": true
+ },
+ { "do": "eval", "expr": "(() => { window.__p0 = window.__wakppu.info().player; return window.__p0 })()", "as": "startPosition" },
+ { "do": "swipe", "selector": ".stick", "dx": 50, "dy": -50, "hold": 1000 },
+ {
+  "do": "expect",
+  "name": "the stick walks the player in portrait too",
+  "expr": "(() => { const p = window.__wakppu.info().player; return Math.hypot(p.x - window.__p0.x, p.z - window.__p0.z) > 1.5 })()",
+  "equals": true
+ },
+ { "do": "shot", "file": "touch-portrait-play.png" }
+]

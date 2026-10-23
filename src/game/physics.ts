@@ -84,7 +84,7 @@ export function requestJump(p: PlayerState) {
   p.jumpBuf = PLAYER.jumpBuffer
 }
 
-/** One frame: jump and run control, then the fixed substeps. moveX/moveZ is a world direction of length 1 or 0. */
+/** One frame: jump and run control, then the fixed substeps. moveX/moveZ is a world direction of length 0 to 1. */
 export function stepPlayer(p: PlayerState, world: World, moveX: number, moveZ: number, dt: number): StepEvents {
   const ev: StepEvents = { jumped: false, landingSpeed: null, groundChanges: [] }
   const setGround = (c: Collider | null) => {

@@ -152,6 +152,8 @@ export class Game {
       key: (e) => this.onKey(e),
       drag: (dx, dy) => { if (this.state.screen !== 'menu') this.rig.drag(dx, dy) },
       zoom: (dy) => { if (this.state.screen !== 'menu') this.rig.zoom(dy) },
+      pinch: (s) => { if (this.state.screen !== 'menu') this.rig.pinch(s) },
+      wake: () => this.wake(),
     })
     const onResize = () => this.stage.resize()
     const onVisibility = () => this.setPaused('hidden', document.hidden)
@@ -284,6 +286,23 @@ export class Game {
 
   focus() {
     this.canvas.focus()
+  }
+
+  /** The on-screen stick: ix to the right, iz forward, length 0 to 1; [0, 0] lets go. */
+  setStick(ix: number, iz: number) {
+    this.input.setStick(ix, iz)
+  }
+
+  /** The on-screen jump button. */
+  jump() {
+    if (this.state.screen === 'playing') requestJump(this.player)
+  }
+
+  /** A key press or a finger lifting: the player is back, and the gesture lets a stalled audio start again. */
+  wake() {
+    if (this.state.screen === 'menu') return
+    this.setPaused('blur', false)
+    this.audio.unlock()
   }
 
   dispose() {
@@ -478,11 +497,7 @@ export class Game {
   private onKey(e: KeyboardEvent) {
     if (e.target instanceof HTMLInputElement) return
     const { screen } = this.state
-    if (screen !== 'menu') {
-      // a key press means the player is back; it is also a gesture that lets a stalled audio start again
-      this.setPaused('blur', false)
-      this.audio.unlock()
-    }
+    this.wake()
     if (screen === 'menu') {
       // a focused button handles Enter and Space on its own
       if ((e.code === 'Enter' || e.code === 'Space') && !(e.target instanceof HTMLButtonElement)) {
@@ -598,6 +613,7 @@ export class Game {
       screen: this.state.screen, tower: this.tower.id, difficulty: this.state.difficulty,
       elapsed: this.elapsed, steps: this.steps, currentCp: this.currentCp, cleared: this.cleared, paused: this.paused,
       player: { x: this.player.x, y: this.player.y, z: this.player.z, grounded: this.player.grounded },
+      camera: { yaw: this.rig.yaw, dist: this.rig.dist, fov: this.stage.camera.fov },
       ground: this.ground, groundSkin: this.ground >= 0 ? this.layout.platforms[this.ground].skinId : null,
       loops: this.audio.loopCount, audio: this.audio.state, soundFiles: this.audio.files,
       platforms: this.layout.platforms.length, checkpoints: this.layout.checkpoints, goal: this.layout.goal,

@@ -86,4 +86,15 @@ export const CAMERA = {
   startOffset: -0.55,
   /** seconds the camera takes to settle in at the start of a run */
   settle: 1.2,
+  /** a portrait screen widens the vertical view angle up to this, so the view keeps some width */
+  maxFov: 80,
+} as const
+
+/** On-screen thumb controls for touch screens; first guesses, not yet tried on a phone by the user. */
+export const TOUCH = {
+  /** how far (CSS px) the knob travels from where the thumb landed */
+  stickRadius: 56,
+  /** fractions of that travel: no move inside `dead`, full speed from `full` */
+  stickDead: 0.2,
+  stickFull: 0.7,
 } as const

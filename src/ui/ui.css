@@ -38,7 +38,7 @@ kbd.wide { min-width: 4.4em; }
 /* ---------- start screen ---------- */
 
 .overlay {
-  position: fixed; inset: 0; overflow-y: auto; background: var(--veil);
+  position: fixed; inset: 0; overflow-y: auto; overscroll-behavior: contain; background: var(--veil);
   padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(16px + env(safe-area-inset-bottom, 0px));
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -94,7 +94,8 @@ kbd.wide { min-width: 4.4em; }
 .start-row {
   display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap;
   /* the start button stays in view at the bottom of the window while the card scrolls */
-  position: sticky; bottom: 0; z-index: 1;
+  /* sticks flush to the window's bottom edge, over the overlay's padding, so nothing peeks out below it */
+  position: sticky; bottom: calc(-16px - env(safe-area-inset-bottom, 0px)); z-index: 1;
   margin: 2px -22px -22px; padding: 14px 22px calc(18px + env(safe-area-inset-bottom, 0px));
   background: var(--paper); border-top: 1px solid var(--line); border-radius: 0 0 24px 24px;
 }
@@ -160,6 +161,47 @@ details.more[open] summary { margin-bottom: 8px; }
 .stats dd { margin: 2px 0 0; font-size: 26px; }
 .best { margin: 0; font-family: var(--font-display); font-size: 15px; color: var(--wax-deep); }
 .row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* ---------- touch screens ---------- */
+
+/* panels hold only buttons there, so a stray pinch on one must not zoom the page */
+.hud.touch .panel { touch-action: none; }
+.hud.touch .keycap.small { min-height: 40px; padding: 8px 14px; font-size: 14px; }
+
+.touch-pad { position: fixed; inset: 0; pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.stick-zone { position: absolute; left: 0; bottom: 0; width: 45%; height: 62%; pointer-events: auto; touch-action: none; }
+/* the stick rests in the corner and comes to wherever the thumb lands; the knob travels TOUCH.stickRadius */
+.stick {
+  --x: calc(84px + env(safe-area-inset-left, 0px));
+  --y: calc(100% - 84px - env(safe-area-inset-bottom, 0px));
+  position: absolute; left: var(--x); top: var(--y); width: 124px; height: 124px; margin: -62px 0 0 -62px;
+  border-radius: 50%; background: rgba(255, 249, 252, 0.4); border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 8px 22px var(--shadow); opacity: 0.7;
+}
+.stick.held { opacity: 1; }
+.knob {
+  position: absolute; left: 50%; top: 50%; width: 56px; height: 56px; margin: -28px 0 0 -28px; border-radius: 50%;
+  background: linear-gradient(180deg, var(--paper), var(--paper-edge)); border: 1px solid var(--line);
+  box-shadow: 0 4px 0 var(--keycap-side), 0 8px 16px var(--shadow);
+}
+.jump {
+  position: absolute; right: calc(28px + env(safe-area-inset-right, 0px)); bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  width: 88px; height: 88px; border-radius: 50%; pointer-events: auto; touch-action: none; cursor: pointer;
+  font-family: var(--font-display); font-size: 20px; color: var(--ink);
+  background: linear-gradient(180deg, var(--wax-light), var(--wax)); border: 1px solid transparent;
+  box-shadow: 0 5px 0 var(--wax-side), 0 12px 24px var(--shadow);
+}
+.jump:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--wax-side), 0 4px 10px var(--shadow); }
+
+.portrait-only { display: none; }
+@media (orientation: portrait) { .portrait-only { display: block; } }
+/* a phone on its side: a slimmer progress panel leaves the lower screen to the thumbs */
+@media (max-height: 500px) {
+  .meter { gap: 4px; padding: 8px 12px; }
+  .meter-row .height { font-size: 24px; }
+  .meter-row.small .num { font-size: 15px; }
+  .tag { display: none; }
+}
 
 @media (max-width: 640px) {
   .overlay.start { justify-items: center; background: var(--veil); }
